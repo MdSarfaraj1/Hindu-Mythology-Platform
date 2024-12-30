@@ -1,8 +1,10 @@
-const express=require("express");
+const express = require("express");
 const Groq = require("groq-sdk");
 const Topic = require("../Models/Topics");
 const { isLoggedIn } = require("../Middleware/middlewares");
-const router=express.Router({mergeParams:true});
+const User = require("../Models/User");
+const Stories = require("../Models/Stories");
+const router = express.Router({ mergeParams: true });
 router.get("/retrieve-topics", isLoggedIn, async (req, res) => {
   try {
     let Notification = false;
@@ -23,7 +25,7 @@ router.get("/retrieve-topics", isLoggedIn, async (req, res) => {
     res.status(500).json({ error: "Error checking topics" });
   }
 });
-router.patch("/update-topics", isLoggedIn, async (req, res) => {
+router.patch("/update-topics", isLoggedIn, async (req, res) => { // also save topic first time
   try {
     const { selectedTopics } = req.body;
     const user = req.user;
@@ -52,7 +54,7 @@ router.patch("/update-topics", isLoggedIn, async (req, res) => {
         return topic._id; // Return the topic ID
       })
     );
-
+// for handling topic's user count
     await Promise.all(
       topicsToRemove.map(async (topicName) => {
         const topic = await Topic.findOne({ name: topicName });
@@ -65,8 +67,7 @@ router.patch("/update-topics", isLoggedIn, async (req, res) => {
     );
 
     user.selectedTopics = [
-      ...user.selectedTopics
-        .filter((topic) => !topicsToRemove.includes(topic.name)) // Remove deselected topics
+      ...user.selectedTopics.filter((topic) => !topicsToRemove.includes(topic.name)) // Remove deselected topics
         .map((topic) => topic._id), // Keep only the IDs of remaining topics
       ...addedTopicIds, // Add new topic IDs
     ];
@@ -85,9 +86,9 @@ router.patch("/update-topics", isLoggedIn, async (req, res) => {
     });
   }
 });
-router.get("/learn/facts/:topic", isLoggedIn, async (req, res) => {
+router.get("/learn/facts", isLoggedIn, async (req, res) => {
   const topic = req.params.topic;
-
+const language=req.user.storyLanguage
   // const completion = await openai.chat.completions.create({
   //     model: "gpt-4o-mini",
   //     messages: [
@@ -107,9 +108,17 @@ router.get("/learn/facts/:topic", isLoggedIn, async (req, res) => {
       {
         role: "user",
         content: `
-   Generate a captivating heading and full story based on ${topic} from Indian epics . The story should focus on the emotional turmoil or moral dilemma faced by a main character. The story should highlight their internal conflict, struggles, and the resolution of their dilemma with divine intervention, wisdom, or moral decisions with rich detail and multiple events that lead to a resolution. The structure should include the following:\n\n1. **Heading:** A brief, captivating heading that encapsulates the emotional turmoil or major decision the character faces.\n2. 
+   Generate a captivating heading and full story based on any one of this  ${topic} from Indian epics ,the story must be in language ${language}. The story should focus on the emotional turmoil or moral dilemma faced by a main character. The story should highlight their internal conflict, struggles, and the resolution of their dilemma with divine intervention, wisdom, or moral decisions with rich detail and multiple events that lead to a resolution. The structure should include the following:\n\n1. **Heading:** A brief, captivating heading that encapsulates the emotional turmoil or major decision the character faces.\n2. 
    **Notification** The first paragraph of the story, written in a way that draws immediate interest and can serve as a standalone teaser or notification
-   **Story:** The full story This story should explain the situation, focusing on the character’s emotional journey and the eventual resolution..`,
+   //The full story in three or section This story should explain the situation, focusing on the character’s emotional journey and the eventual resolution.. 
+   **s1Heading** heading of the story's first section
+   **s1Content** content of the story's first section
+     **s2Heading** heading of the story's second section
+   **s2Content** content of the story's second section
+     **s3Heading** heading of the story's third section
+   **s3Content** content of the story's third section
+
+   `,
       },
     ],
     model: "llama3-8b-8192",
@@ -119,11 +128,44 @@ router.get("/learn/facts/:topic", isLoggedIn, async (req, res) => {
   const parts = response.split(/\*\*[^*]+:\*\*/);
   const heading = parts[1]?.trim();
   const notification = parts[2]?.trim();
-  const story = parts[3]?.trim();
+  const story = [ 
+    {
+      head:parts[3]?.trim(),
+      content:parts[4]?.trim()
+    },
+    {
+      head:parts[5]?.trim(),
+      content:parts[6]?.trim()
+    },
+    {
+      head:parts[7]?.trim(),
+      content:parts[8]?.trim()
+    }
+  ]
   res.status(200).json({
     heading: heading,
     noti: notification,
     story: story,
   });
 });
-module.exports=router
+module.exports = router;
+router.post("/fact/save",isLoggedIn,async(req,res)=>{
+  const user=req.user
+  try{
+    let newStory=await Stories.create(req.body.facts)
+    console.log(newStory)
+    await user.savedStories.push(newStory._id)
+    await user.save()
+    res.status(200).json({
+      message:"Story is Saved"
+    })
+  }
+  catch(err){
+    console.log(err)
+    res.status(406).json({
+      message:"Topic is not present"
+    })
+  }
+  
+  
+})

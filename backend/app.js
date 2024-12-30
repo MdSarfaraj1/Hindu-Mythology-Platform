@@ -42,7 +42,7 @@ app.use("/topics", topicRouter);
 app.use("/Notification", notificationRouter);
 
 // Schedule notifications
-// schedule.scheduleJob("*/1 * * * *", async () => {
+//schedule.scheduleJob("* */1 * * *", async () => {
 //   console.log("Sending notifications...");
 //   try {
 //     await NotificationController.sendNotifications();

@@ -1,6 +1,7 @@
-const express=require("express");
+const express = require("express");
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const router=express.Router({mergeParams:true});
+const router = express.Router({ mergeParams: true });
 const { isLoggedIn } = require("../Middleware/middlewares");
 const jwt = require("jsonwebtoken");
 const User = require("../Models/User");
@@ -30,9 +31,10 @@ router.post("/signup", async (req, res) => {
     .json({
       message: "User created successfully !",
       userID: newUser._id,
+      username: newUser.username,
     });
 });
-router.post("/login",async (req, res) => {
+router.post("/login", async (req, res) => {
   const token = req.cookies.sessionToken;
   if (token) {
     try {
@@ -57,6 +59,7 @@ router.post("/login",async (req, res) => {
       .json({
         message: `Welcome ${user.username}`,
         userID: user._id,
+        username: user.username,
       });
   }
 
@@ -64,7 +67,7 @@ router.post("/login",async (req, res) => {
     message: "User Does not exist or wrong credentials provide",
   });
 });
-router.post("/logout",isLoggedIn, (req, res) => {
+router.post("/logout", isLoggedIn, (req, res) => {
   try {
     res
       .clearCookie("sessionToken", {
@@ -80,4 +83,31 @@ router.post("/logout",isLoggedIn, (req, res) => {
     });
   }
 });
-module.exports=router;
+router.post("/update", async (req, res) => {
+  data = req.body.userProfile;
+  console.log(data);
+  const user = await User.findById(req.body.userID);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  } else {
+    user.username = data.username;
+    user.email = data.email;
+    user.storyLanguage = data.storyLanguage;
+    await user.save();
+    res.status(200).json({ message: "Profile Updated Successfully" });
+  }
+});
+router.post("/profile", isLoggedIn, async (req, res) => {
+  const user = await User.findById(req.body.userID);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  } else {
+    res.status(200).json({
+      username: user.username,
+      email: user.email,
+      storyLanguage: user.storyLanguage,
+    });
+  }
+});
+
+module.exports = router;

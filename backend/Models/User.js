@@ -27,6 +27,14 @@ const userSchema = new mongoose.Schema({
         type:String,
         default:""
     },
+    storyLanguage:{
+        type:String,
+        default:"English"
+    },
+    savedStories:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Story'
+    }],
     resetPasswordToken: String,
     resetPasswordExpires: Date
 });
