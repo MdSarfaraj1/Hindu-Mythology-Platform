@@ -1,11 +1,12 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const genAI = new GoogleGenerativeAI("AIzaSyD8RIiIbUfeRY4nSmQ-vHGgroU7KQnth0U");
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.gemini_api_key);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+ 
 
 module.exports.generateStory = async (topics, language) => {
   try {
-    const prompt = `Generate a captivating heading and a vivid, immersive story based on a topic from ${topics}, including Indian epics, mythology, folklore, or speculative mythology. The story should be written in the language specified as ${language} and can revolve around themes like redemption, forbidden knowledge, destiny versus free will, or unsung heroes. 
+    const prompt = `Generate a captivating heading and a vivid, immersive story based on a topic from ${topics}, including Indian epics, mythology, folklore, or speculative mythology. The story should be written in the language  ${language} and can revolve around themes like redemption, forbidden knowledge, destiny versus free will, or unsung heroes or any random story that you want to provide. 
 
 The structure must include the following elements:
 

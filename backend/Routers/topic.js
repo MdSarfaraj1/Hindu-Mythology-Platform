@@ -91,7 +91,7 @@ const language=req.user.storyLanguage
 let response=await generateStory(topic,language)
 
   res.status(200).json({
-    heading: response.heading,
+    heading: response.heading, 
     story: response.story,
   });
 });

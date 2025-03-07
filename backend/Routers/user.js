@@ -69,6 +69,7 @@ router.post("/login", async (req, res) => {
 });
 router.post("/logout", isLoggedIn, (req, res) => {
   try {
+    console.log("from logout route",req.params)
     res
       .clearCookie("sessionToken", {
         httpOnly: true,

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Contex/Contex_Api";
 import axios from "axios";
 const Navbar = () => {
-  const { userID, setUserID } = useAuth();
+  const { userID, setUser } = useAuth();
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
@@ -13,7 +13,7 @@ const Navbar = () => {
           withCredentials: true,
         }
       );
-      setUserID(null); // Clear from context
+      setUser(null); // Clear from context
       navigate("/");
     } catch (error) {
       console.error("Logout error:", error);

@@ -18,7 +18,7 @@ import Facts from "./components/Facts/Facts.jsx";
 import UserAccount from "./components/Accounts/UserAccount.jsx";
 import Profile from "./components/Accounts/Profile.jsx";
 import SavedStories from "./components/Accounts/SavedStories.jsx";
-import NavbarOptions from "./components/NavbarOptions/NavbarOptions.jsx";
+// import NavbarOptions from "./components/NavbarOptions/NavbarOptions.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
