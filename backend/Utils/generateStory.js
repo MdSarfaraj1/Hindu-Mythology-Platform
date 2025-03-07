@@ -15,14 +15,13 @@ The structure must include the following elements:
 3. **Section 1 Heading (s1Heading):** A title introducing the first segment of the story.
 4. **Section 1 Content (s1Content):** The opening, setting the scene and introducing the characters, including their challenges or ambitions.
 5. **Section 2 Heading (s2Heading):** A title introducing the second segment of the story.
-6. **Section 2 Content (s2Content):** The main events, challenges, and turning points, with vivid details and cultural richness.
+6. **Section 2 Content (s2Content):** The main events, challenges, and turning points, with vivid details and cultural richness. 
 7. **Section 3 Heading (s3Heading):** A title introducing the conclusion.
 8. **Section 3 Content (s3Content):** The resolution, emphasizing moral insights, reflections, or the lasting impact of the events.
 
 Include a magical object, a celestial prophecy, or an unexpected betrayal to add intrigue, and ensure the story brings out the richness of Indian mythology while offering something fresh and engaging. Stories should highlight unsung heroes or unexpected perspectives, and the writing style should align with the chosen language for cultural depth.
 `;
     const resultt = await model.generateContent(prompt);
-console.log("from gemini",resultt.response.text());
 const response=resultt.response.text()
 const parts = response.split(/\*\*[^*]+:\*\*/).map(part => part.trim());
 

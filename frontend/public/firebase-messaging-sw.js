@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyArmHwlm9_TXAUPZ26HGcR9hXFEPA9ujc4",
   authDomain: "knowledge-2059c.firebaseapp.com",
   projectId: "knowledge-2059c",
-  storageBucket: "knowledge-2059c.firebasestorage.app",
+  storageBucket: "knowledge-2059c.firebasestorage.app", 
   messagingSenderId: "654795357369",
   appId: "1:654795357369:web:8fb18ae32e06f8d00a6f68",
   measurementId: "G-YQTBK6J47E"
@@ -29,13 +29,12 @@ messaging.onBackgroundMessage((payload) => {
       url: payload.data?.url || "/", // Pass the URL from the data payload
     },
   };
-console.log("hi",notificationOptions)
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 // Handle notification click events
 self.addEventListener("notificationclick", (event) => {
-  console.log("Notification clicked:", event.notification);
+  console.log("Notification clicked:", event.notification); 
   const url = event.notification.data?.url || "/";
   console.log("URL in notification data:", url);
 

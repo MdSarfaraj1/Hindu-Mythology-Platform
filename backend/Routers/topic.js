@@ -92,10 +92,26 @@ let response=await generateStory(topic,language)
 
   res.status(200).json({
     heading: response.heading, 
-    story: response.story,
+    story: response.story, 
   });
 });
+router.get("/learn/NotificationStory",async(req,res)=>{
+  const {StoryId}=req.query;
+  const story = await Stories.findById(StoryId)
+  .select('-_id -createdAt -noExpiry -__v')  // Exclude these fields
+  .lean(); // Converts Mongoose document to a plain JS object
+if (!story) {
+  return res.status(404).json({
+    message: "Story not found",
+  });
+}
+// Remove `_id` from each story 
+if (story && story.story) {
+  story.story = story.story.map(({ _id, ...rest }) => rest);
+}
 
+  res.status(200).json(story) 
+})
 
 router.post("/fact/save",isLoggedIn,async(req,res)=>{
   const user=req.user

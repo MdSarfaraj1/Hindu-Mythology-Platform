@@ -1,4 +1,5 @@
 const User = require("../Models/User");
+const Story =require("../Models/Stories")
 const admin = require("firebase-admin");
 const serviceAccount = require("../firbase_admin.json");
 const { generateStory } = require("../Utils/generateStory");
@@ -16,20 +17,22 @@ class NotificationController {
       const users = await User.find(
         { NotificationToken: { $ne: "" } },
         { NotificationToken: 1, selectedTopics: 1, _id: 0 ,storyLanguage:1}
-      ).populate({ path: "selectedTopics", select: "name" });
+      ).populate({ path: "selectedTopics", select: "name" }); 
 
-      let sendingStoryPromises = users.map(async (user) => {
+      let sendingStoryPromises = users.map(async (user) => { 
         const topics = user.selectedTopics.map((topic) => topic.name);
 
         let story = await generateStory(topics.join(","),user.storyLanguage);
-       
+      
+       let newStory= new Story(story) 
+       await newStory.save()
         const message = {
           notification: {
             title: story.heading,
             body: story.notification,
           },
           data: {
-            url: `https://your-link.com`, 
+            url: `http://localhost:5173/storyOfNotification?StoryId=${newStory._id}`, 
           },
           token: user.NotificationToken,
         };

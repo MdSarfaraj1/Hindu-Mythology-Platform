@@ -18,6 +18,7 @@ import Facts from "./components/Facts/Facts.jsx";
 import UserAccount from "./components/Accounts/UserAccount.jsx";
 import Profile from "./components/Accounts/Profile.jsx";
 import SavedStories from "./components/Accounts/SavedStories.jsx";
+import StoryOfNotification from "./components/StoryOfNotification/StoryOfNotification.jsx";
 // import NavbarOptions from "./components/NavbarOptions/NavbarOptions.jsx";
 
 const router = createBrowserRouter(
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
         <Route path="savedStories"  element={<SavedStories/>} />
       </Route>
       <Route path="/askQuestion" element/>
+      <Route path="/storyOfNotification" element={<StoryOfNotification />} />
             {/* <Route path="/NavbarTopics/:topic" element={<NavbarOptions/>} /> */}
     </>
   )

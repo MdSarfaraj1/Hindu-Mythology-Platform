@@ -237,7 +237,7 @@ const Navbar = () => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <Link to={"/askQuestion"} className="dropdown-item" href="#all-personalities">
+                  <Link to={"/askQuestion"} className="dropdown-item" >
                     All Personalities
                   </Link>
                 </li>
@@ -257,11 +257,20 @@ const Navbar = () => {
               </a>
               <ul className="dropdown-menu dropdown-menu-dark">
                 {userID ? (
+                  <>
                   <li>
-                    <button className="btn" onClick={handleLogout}>
+                    <Link to={"/accountSettings"} className="dropdown-item" >
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <button className=" dropdown-item" onClick={handleLogout}>
                       Logout
                     </button>
-                  </li>
+                    </li>
+                    
+                  </>
+                  
                 ) : (
                   <>
                     <li>

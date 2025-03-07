@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const router = express.Router({ mergeParams: true });
 const { isLoggedIn } = require("../Middleware/middlewares");
