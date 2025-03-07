@@ -23,20 +23,20 @@ const SelectedTopics = ({ userID }) => {
           setIsInterested(response.data.Notification_Status);
         } catch (error) {
           console.error("Error fetching topics:", error.response.data.message);
-        } finally {
-          setIsLoading(false);
         }
       }
     };
 
     fetchUserTopics();
-  }, []);
+  }, [userTopics]);
   const handleCheckboxChange = async (event) => {
     const checked = event.target.checked;
     if (checked) {
+    
       request_Notification_Permission(userID);
       setIsInterested(true);
     } else {
+     
       denied_Notification_Permission(userID);
       setIsInterested(false);
     }

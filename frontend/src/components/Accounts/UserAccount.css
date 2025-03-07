@@ -1,0 +1,65 @@
+body {
+    font-family: 'Arial', sans-serif; /* Set a clean font for the body */
+    background-color: #e9ecef; /* Light grey background for the entire page */
+}
+
+.user-account-container {
+    background-color: #ffffff; /* White background for the container */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    display: flex; /* Flexbox for layout */
+    max-width: 1200px; /* Max width for the container */
+    margin: 20px auto; /* Center the container */
+    overflow: hidden; /* Prevent overflow */
+    height: 90vh;
+}
+
+.user-account-navigation {
+    width: 250px; /* Fixed width for navigation */
+    padding: 20px; /* Padding inside navigation */
+    border-radius: 5px;
+    background-color: #0a2722; /* Dark background for navigation */
+    color: white; /* White text color */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.user-account-navigation h4 {
+    margin-bottom: 15px; /* Space below the heading */
+}
+
+.user-account-navigation ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+}
+
+.user-account-navigation li {
+    padding: 10px; /* Padding for each list item */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+
+
+.user-account-body {
+    flex-grow: 1; /* Allow body to take remaining space */
+    padding: 30px; /* Padding inside body */
+    color: #212529; /* Dark text color */
+}
+
+.user-account-body h2 {
+    margin-bottom: 20px; /* Space below the heading */
+    color: #343a40; /* Dark color for the heading */
+}
+
+.user-account-body p {
+    font-size: 1.1em; /* Slightly larger font size for paragraph */
+    line-height: 1.6; /* Better line height for readability */
+}
+
+/* New styles for better layout */
+.content {
+    background-color: #c2d8ee; /* Light background for content area */
+    border-radius: 8px; /* Rounded corners for content */
+    padding: 20px; /* Padding inside content */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for content */
+}

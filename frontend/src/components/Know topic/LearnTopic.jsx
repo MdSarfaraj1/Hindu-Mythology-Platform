@@ -37,9 +37,6 @@ function LearnTopic() {
                 <a href="#overview" className="list-group-item ">
                   <i className="bi bi-book me-2"></i>Overview
                 </a>
-                <a href="#story" className="list-group-item ">
-                  <i className="bi bi-journal-text me-2"></i>The Story
-                </a>
                 {topicData.chapters.map((chapter, index) => (
                   <a
                     href={`#${chapter.name}`}
@@ -49,6 +46,11 @@ function LearnTopic() {
                     {chapter.name}
                   </a>
                 ))}
+                <Link to={`/learn/facts/${topic}` }className="list-group-item">
+                <i class="bi bi-three-dots-vertical"></i>
+                  More Stories 
+                </Link>
+
               </div>
             </div>
           </div>

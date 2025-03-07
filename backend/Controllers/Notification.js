@@ -1,6 +1,7 @@
 const User = require("../Models/User");
 const admin = require("firebase-admin");
 const serviceAccount = require("../firbase_admin.json");
+const { generateStory } = require("../Utils/generateStory");
 
 // Initialize Firebase Admin once
 admin.initializeApp({
@@ -14,17 +15,21 @@ class NotificationController {
       //getting users
       const users = await User.find(
         { NotificationToken: { $ne: "" } },
-        { NotificationToken: 1, selectedTopics: 1, _id: 0 }
+        { NotificationToken: 1, selectedTopics: 1, _id: 0 ,storyLanguage:1}
       ).populate({ path: "selectedTopics", select: "name" });
 
-      sendingStoryPromises = users.map(async (user) => {
+      let sendingStoryPromises = users.map(async (user) => {
         const topics = user.selectedTopics.map((topic) => topic.name);
 
-        let story = generateStory(topics.join(","));
+        let story = await generateStory(topics.join(","),user.storyLanguage);
+       
         const message = {
           notification: {
-            title: story.title,
-            body: story.body,
+            title: story.heading,
+            body: story.notification,
+          },
+          data: {
+            url: `https://your-link.com`, 
           },
           token: user.NotificationToken,
         };
@@ -35,13 +40,14 @@ class NotificationController {
           console.error("Error sending notification:", error);
         }
       });
+      await Promise.all(sendingStoryPromises);
+      return { success: true, message: "Notifications sent successfully" };
     } catch (error) {
       console.error("Error sending notifications:", error);
       return { success: false, message: "Failed to send notifications" };
     }
 
-    await Promise.all(sendingStoryPromises);
-    return { success: true, message: "Notifications sent successfully" };
+   
   }
 
   // Save user's Firebase token

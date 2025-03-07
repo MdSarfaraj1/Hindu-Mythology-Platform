@@ -102,27 +102,27 @@ const Navbar = () => {
               </a>
               <ul className="dropdown-menu dropdown-menu-dark">
                 <li>
-                  <a className="dropdown-item" href="#vedas">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/vedas">
                     Vedas
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#upanishads">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/upanishads">
                     Upanishads
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#puranas">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/puranas">
                     Puranas
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#puranas">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/Ramayana">
                     Ramayana
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#puranas">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/Mahabharata">
                     Mahabharata
                   </a>
                 </li>
@@ -130,7 +130,7 @@ const Navbar = () => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#bhagavad-gita">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/bhagavad-gita">
                     Bhagavad Gita
                   </a>
                 </li>
@@ -150,17 +150,17 @@ const Navbar = () => {
               </a>
               <ul className="dropdown-menu dropdown-menu-dark">
                 <li>
-                  <a className="dropdown-item" href="#vishnu">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/vishnu">
                     Vishnu
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#shiva">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/shiva">
                     Shiva
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#brahma">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/brahma">
                     Brahma
                   </a>
                 </li>
@@ -168,7 +168,7 @@ const Navbar = () => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#all-deities">
+                  <a className="dropdown-item" href="https://www.britannica.com/topic/list-of-Hindu-deities-2066639">
                     All Deities
                   </a>
                 </li>
@@ -188,17 +188,17 @@ const Navbar = () => {
               </a>
               <ul className="dropdown-menu dropdown-menu-dark">
                 <li>
-                  <a className="dropdown-item" href="#ram">
+                  <a className="dropdown-item" href="https://www.britannica.com/topic/Rama-Hindu-deity">
                     Ram
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#krishna">
+                  <a className="dropdown-item" href="https://www.britannica.com/topic/Krishna-Hindu-deity">
                     Krishna
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#hanuman">
+                  <a className="dropdown-item" href="https://www.britannica.com/topic/Hanuman">
                     Hanuman
                   </a>
                 </li>
@@ -206,17 +206,17 @@ const Navbar = () => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#pandavas">
+                  <a className="dropdown-item" href="https://www.worldhistory.org/Pandavas/">
                     Pandavas
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#bhim">
+                  <a className="dropdown-item" href="#https://en.wikipedia.org/wiki/Bhima">
                     Bhim
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#arjun">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/arjuna">
                     Arjun
                   </a>
                 </li>
@@ -224,12 +224,12 @@ const Navbar = () => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#sita">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/sita">
                     Sita
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#draupadi">
+                  <a className="dropdown-item" href="https://en.wikipedia.org/wiki/draupadi">
                     Draupadi
                   </a>
                 </li>
@@ -237,9 +237,9 @@ const Navbar = () => {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#all-personalities">
+                  <Link to={"/askQuestion"} className="dropdown-item" href="#all-personalities">
                     All Personalities
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </li>

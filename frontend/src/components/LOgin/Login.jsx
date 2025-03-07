@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contex/Contex_Api";
 
 function Login() {
-  const {setUserID}=useAuth();
+  const {setUser}=useAuth();
   const navigate=useNavigate();
   const [message, setMessage] = useState({ text: "", type: "" });
   const [formData, setFormData] = useState({
@@ -26,7 +26,7 @@ function Login() {
         text: response.data.message,
         type: "success",
       });
-      setUserID(response.data.userID);
+      setUser(response.data.userID,response.data.username);
       setTimeout(() => {
         navigate(`/dashboard`);
       }, 1000);

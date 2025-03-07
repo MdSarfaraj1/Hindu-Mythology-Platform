@@ -4,8 +4,8 @@ import axios from "axios";
 import { useAuth } from "../../Contex/Contex_Api";
 
 function Signup() {
-  const {setUserID}=useAuth()
-  const navigate=useNavigate();
+  const { setUser } = useAuth()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -22,14 +22,14 @@ function Signup() {
 
     try {
       const response = await axios.post("http://localhost:8085/user/signup", formData);
-      
+
       if (response.status === 201) {
-        setMessage({ 
+        setMessage({
           text: response.data.message,
-          type: 'success' 
+          type: 'success'
         });
         setTimeout(() => {
-          setUserID(response.data.userID)
+          setUser(response.data.userID, response.data.username)
           navigate(`/dashboard`);
         }, 1000);
       }
@@ -37,21 +37,21 @@ function Signup() {
       if (error.response) {
         switch (error.response.status) {
           case 409:
-            setMessage({ 
-              text: error.response.data.message, 
-              type: 'error' 
+            setMessage({
+              text: error.response.data.message,
+              type: 'error'
             });
             break;
           default:
-            setMessage({ 
+            setMessage({
               text: error.response.data.message || 'Something went wrong. Please try again later.',
-              type: 'error' 
+              type: 'error'
             });
         }
       } else {
-        setMessage({ 
+        setMessage({
           text: 'Network error. Please check your connection.',
-          type: 'error' 
+          type: 'error'
         });
       }
     }
@@ -80,11 +80,10 @@ function Signup() {
                 <h2 className="text-center text-white mb-4">Create Account</h2>
                 {message.text && (
                   <div
-                    className={`alert ${
-                      message.type === "success"
+                    className={`alert ${message.type === "success"
                         ? "alert-success"
                         : "alert-danger"
-                    } mb-3`}
+                      } mb-3`}
                   >
                     {message.text}
                   </div>
@@ -107,8 +106,8 @@ function Signup() {
                     />
                     <div className="valid-feedback">username looks good</div>
                     <div className="invalid-feedback">
-                      {" "}
-                      Please choose a username.{" "}
+
+                      Please choose a username.
                     </div>
                   </div>
 
@@ -137,6 +136,7 @@ function Signup() {
                       required
                     />
                   </div>
+                 
 
                   <button
                     type="submit"
