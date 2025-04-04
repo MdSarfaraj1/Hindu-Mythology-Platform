@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./dashboard.css";
-import SelectTopics from "./SelectTopics";
+import SelectTopics from "./SelectTopics"; 
 import axios from "axios";
 import { useAuth } from "../../Contex/Contex_Api";
 import SelectedTopics from "./SelectedTopics";
@@ -11,33 +11,36 @@ const Dashboard_Layout = () => {
   const navigate = useNavigate();
   const [showTopicModal, setShowTopicModal] = useState(false);
   const [selectedTopics, setSelectedTopics] = useState([]);
-  const { userID } = useAuth();
+  const { userID,flashMessage,setFlashMessage } = useAuth();
 
   const topics = [
     "Vedas",
     "Upanishad",
-    "Bhagavad Gita",
+    "BhagavadGita",
     "Puranas",
     "Mahabharata",
     "Ramayana",
-    "Temples History",
-    "Hindu Philosophy",
+    "TemplesHistory",
+    "HinduPhilosophy",
   ];
   const [featuredContent] = useState([
     {
       title: "Vedic Wisdom",
       description: "Ancient knowledge from the sacred texts",
       icon: "bi-book-fill",
+      link:"https://bangaloreashram.org/vedic-wisdom/"
     },
     {
       title: "Sacred Rituals",
       description: "Understanding traditional practices",
       icon: "bi-fire",
+      link:"https://www.britannica.com/topic/Hinduism/Practice"
     },
     {
       title: "Meditation Guide",
       description: "Path to inner peace and enlightenment",
       icon: "bi-peace",
+      link:"https://www.artofliving.org/in-en/meditation-overview"
     },
   ]);
 
@@ -64,9 +67,10 @@ const Dashboard_Layout = () => {
         if (response.status === 200) {
           setShowTopicModal(false);
         }
+        setFlashMessage("Topic Updated Succesfully")
       } catch (error) {
         console.error("Error:", error.response);
-        alert("There was an error saving your topics. Please try again.");
+        alert(error.response.data.message);
       }
     } else {
       alert("Please select at least one topic to continue");
@@ -75,7 +79,14 @@ const Dashboard_Layout = () => {
 
   return (
     <div className="dashboard-container">
+    
       <div className="hero-section position-relative vh-100">
+     {/* Flash Message */}
+     {flashMessage && (
+        <div className="flash-message">
+          {flashMessage}
+        </div>
+      )}
         <div
           className="parallax-bg w-100 h-100"
           style={{
@@ -115,8 +126,8 @@ const Dashboard_Layout = () => {
       </div>
 
       {/* Add Modal */}
-      <div className={`topic-modal ${showTopicModal ? "show" : ""}`}>
-        <div className="topic-modal-content">
+      <div className={`topic-modal ${showTopicModal ? "show" : ""}`} >
+        <div className="topic-modal-content" style={{maxWidth:"800px"}}>
           <h2 className="text-white">Select Topics to know about</h2>
           <div className="topics-grid">
             {topics.map((topic, index) => (
@@ -131,15 +142,23 @@ const Dashboard_Layout = () => {
 
           {/* control buttons*/}
           <div className="modal-buttons">
+          <button
+              className="btn btn-success"
+              onClick={()=>navigate("/allTopics")}
+            >
+              
+              More
+            </button>
+            <button className="btn btn-primary" onClick={handleTopicSubmit}>
+              Submit
+            </button>
             <button
               className="btn btn-secondary"
               onClick={() => setShowTopicModal(false)}
             >
               Cancel
             </button>
-            <button className="btn btn-primary" onClick={handleTopicSubmit}>
-              Submit
-            </button>
+            
           </div>
         </div>
       </div>
@@ -161,7 +180,7 @@ const Dashboard_Layout = () => {
                     <h3 className="h4 mb-3">{content.title}</h3>
                     <p className="text-muted">{content.description}</p>
                     <Link
-                      to={`/topic/${content.title.toLowerCase()}`}
+                      to={`${content.link}`}
                       className="btn btn-outline-primary rounded-pill mt-3"
                     >
                       Explore <i className="bi bi-arrow-right ms-2"></i>

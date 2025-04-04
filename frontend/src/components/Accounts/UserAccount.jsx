@@ -26,10 +26,10 @@ function UserAccount() {
     <div className="user-account-container d-flex p-4">
       <div className="user-account-navigation">
         <h4>
-          <Link to={"/dashboard"} >
+          <Link to={"/dashboard"}  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Go to Dashboard">
             <i
               class="bi bi-arrow-left-square-fill "
-              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tooltip on top"
+             
             ></i>
           </Link>
           &nbsp;&nbsp;&nbsp;Settings

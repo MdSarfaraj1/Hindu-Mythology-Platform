@@ -11,8 +11,8 @@ function Facts() {
   const [newFact, setNewFact] = useState(true);
   const [loading, setLoading] = useState(false);
   const [share, setShare] = useState(false);
-  const [savingStory, setSavingStory] = useState(false);
-  const [savedStoryMassege, setSavedStoryMassege] = useState(false);
+  const [savingStory, setSavingStory] = useState(false); // just for loading purpose
+  const [savedStoryMassege, setSavedStoryMassege] = useState(false); // just for loading purpose
   const handleNewFactRequest = () => {
     setLoading(true);
     setNewFact((prev) => !prev);
@@ -216,8 +216,9 @@ function Facts() {
               ) }
               {share && (
                 <SocialShare
-                  url={window.location.href}
+                  url={`http://localhost:5173/sharedStory/`}
                   text={`Check out this amazing stoty from  ${topic}:  ${facts.heading}`}
+                  facts={facts}// using this because user didnot save story but willing to share
                 />
               )}
             </div>

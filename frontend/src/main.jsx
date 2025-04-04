@@ -19,6 +19,8 @@ import UserAccount from "./components/Accounts/UserAccount.jsx";
 import Profile from "./components/Accounts/Profile.jsx";
 import SavedStories from "./components/Accounts/SavedStories.jsx";
 import StoryOfNotification from "./components/StoryOfNotification/StoryOfNotification.jsx";
+import AllTopics from "./components/Dashboard/AllTopics.jsx";
+import SharedStory from "./components/SharedStory.jsx";
 // import NavbarOptions from "./components/NavbarOptions/NavbarOptions.jsx";
 
 const router = createBrowserRouter(
@@ -38,6 +40,8 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/askQuestion" element/>
       <Route path="/storyOfNotification" element={<StoryOfNotification />} />
+      <Route path="/allTopics" element={<AllTopics />} />
+      <Route path="/sharedStory/:storyId" element={<SharedStory/>} />
             {/* <Route path="/NavbarTopics/:topic" element={<NavbarOptions/>} /> */}
     </>
   )

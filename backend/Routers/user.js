@@ -1,9 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const router = express.Router({ mergeParams: true });
+const router = express.Router({ mergeParams: true }); 
 const { isLoggedIn } = require("../Middleware/middlewares");
 const jwt = require("jsonwebtoken");
 const User = require("../Models/User");
+const Stories = require("../Models/Stories");
 router.post("/signup", async (req, res) => {
   const data = req.body;
   let existingUser = await User.findOne({
@@ -39,7 +40,7 @@ router.post("/login", async (req, res) => {
     try {
       jwt.verify(token, process.env.secret_key);
       return res.status(400).json({
-        message: "You are already logged in. Please logout first.",
+        message: "You are already logged in.",
       });
     } catch (err) {
       // Token is invalid or expired, continue with login
@@ -52,9 +53,10 @@ router.post("/login", async (req, res) => {
     const newToken = jwt.sign({ UserID: user._id }, process.env.secret_key, {
       expiresIn: "24h",
     });
+    let maximumAge=data.remember?7*24 * 60 * 60 * 1000:24 * 60 * 60 * 1000;
     return res
       .status(200)
-      .cookie("sessionToken", newToken, { maxAge: 24 * 60 * 60 * 1000 })
+      .cookie("sessionToken", newToken, { maxAge: maximumAge })
       .json({
         message: `Welcome ${user.username}`,
         userID: user._id,
@@ -68,7 +70,7 @@ router.post("/login", async (req, res) => {
 });
 router.post("/logout", isLoggedIn, (req, res) => {
   try {
-    console.log("from logout route",req.params)
+   
     res
       .clearCookie("sessionToken", {
         httpOnly: true,
@@ -103,11 +105,61 @@ router.post("/profile", isLoggedIn, async (req, res) => {
     return res.status(404).json({ message: "User not found" });
   } else {
     res.status(200).json({
-      username: user.username,
+      username: user.username, 
       email: user.email,
-      storyLanguage: user.storyLanguage,
+      storyLanguage: user.storyLanguage, 
     });
   }
 });
+router.get("/stories", isLoggedIn, async (req, res) => {
+  try{
+     const Stories = await User.findById(req.query.userID).populate("savedStories").select("savedStories");
+     if(Stories==null){
+      return res.status(204).json({
+  message:"no story saved yet"
+})
+     }
+  const cleanedStories = Stories.savedStories.map(({_id, heading, story }) => ({
+    id:_id.toString(),
+    heading,
+    story,
+  }));
+  cleanedStories.map(obj=>({
+    ...obj,
+    story:obj.story.map(({_id,...rest})=>rest)
+  }))
+  console.log(cleanedStories)
+  res.status(200).json({
+    message:cleanedStories
+  });
+  }catch(e){
+    res.status(500).json({
+      message:`Some problem to /stories route${e}`
+    })
+  }
+ 
 
+})
+router.post("/stories/delete",isLoggedIn,async(req,res)=>{
+  let storyID=req.body.storyID
+  try{
+     await User.findByIdAndUpdate(req.body.userID,{$pull:{savedStories:req.body.storyID}}); 
+   await Stories.findByIdAndDelete(storyID);
+   res.status(200).json({message:"Story deleted Successfully"})
+  }catch(e){
+    res.status(500).json({message:"Some error occured in server side"})
+  }
+ 
+  
+}) 
+router.get("/verify-token",(req,res)=>{
+  const token = req.cookies.sessionToken;
+  if (!token) {
+    return res.status(401).json({message:"token not present"});
+  }
+  else{
+    return res.status(200).json({message:"token present"})
+  }
+})
 module.exports = router;
+    

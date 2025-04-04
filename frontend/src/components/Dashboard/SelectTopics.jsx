@@ -1,4 +1,4 @@
-const SelectTopics = ({ topic, isSelected, onChange }) => {
+const SelectTopics = ({ topic, isSelected, onChange }) => {  // used in modal
     return (
       <div 
         className={`topic-item ${isSelected ? 'selected' : ''}`}

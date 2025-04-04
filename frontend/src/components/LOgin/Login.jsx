@@ -10,8 +10,10 @@ function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    remember: false,
   });
   const handleInputChange = (e) => {
+    console.log(e.target.name, e.target.value); 
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
@@ -117,6 +119,14 @@ function Login() {
                           type="checkbox"
                           className="form-check-input"
                           id="remember"
+                          onChange={(e) =>
+                            setFormData((prevData) => ({
+                              ...prevData,
+                              remember: e.target.checked, 
+                            }))
+                          }
+                          name="remember"
+                          checked={formData.remember}
                         />
                         <label
                           className="form-check-label text-white-50"

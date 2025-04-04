@@ -1,16 +1,36 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Mahabharata, Pandavas, Kauravas } from "../../assets/TopicDescription";
+
 import "./LearnTopic.css";
+import { useEffect, useState } from "react";
 
 function LearnTopic() {
   const { topic } = useParams();
-  const topicMap = {
-    Mahabharata: Mahabharata,
-    Pandavas: Pandavas,
-    Kauravas: Kauravas,
-  };
-  const topicData = topicMap[topic] || { chapters: [] }; 
+  const [topicData, setTopicData] = useState(null);
+  console.log(topic)
+
+
+  useEffect(() => {
+      async function getUserChoice(topic) {
+          try {
+              const module = await import("../../assets/TopicDescription"); // Dynamically import the module
+              setTopicData(module[topic]||{}); // Access the specific topic data
+          } catch (error) {
+              console.error("Error loading module:", error);
+          }
+      }
+      getUserChoice(topic); 
+  }, [topic]); 
+
+  if (!topicData) {
+    return (
+      <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div> // Prevents accessing `null` properties
+    );
+   
+  }
+
   return (
     <div className="learn-container">
       {/* Navigation Breadcrumb */}
@@ -78,7 +98,7 @@ function LearnTopic() {
                 ))}
                 <Link to={`/learn/facts/${topic}`}>
                   <i className="bi bi-arrow-right-circle me-2"></i>
-                  More Stories From {topic}
+                  More From {topic}
                 </Link>
               </div>
             </div>

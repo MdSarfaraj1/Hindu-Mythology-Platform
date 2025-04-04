@@ -14,7 +14,7 @@ const SelectedTopics = ({ userID }) => {
       if (userID) {
         try {
           const response = await axios.get(
-            "http://localhost:8085/topics/retrieve-topics",
+            "http://localhost:8085/topics/retrieve-user-topics",
             {
               withCredentials: true,
             }
@@ -65,9 +65,10 @@ const SelectedTopics = ({ userID }) => {
                   <div className="card-img-overlay-wrapper">
                     <img
                       className="card-img-top"
-                      src={`./Topic images/${topic.name.toLowerCase()}.jpg`}
+                      src={topic.image}
                       alt={topic.name}
                     />
+                
                   </div>
                   <div className="card-body">
                     <h5 className="card-title fw-bold">{topic.name}</h5>

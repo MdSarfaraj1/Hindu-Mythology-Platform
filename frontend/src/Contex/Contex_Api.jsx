@@ -7,7 +7,12 @@ export const UserContextProvider=({children})=>{
     const [username, setUsername] = useState(() => {
         return localStorage.getItem('username') || null;
     });
-
+    const [flashMessage,setMessage]=useState("")
+    const setFlashMessage = (msg) => {
+        setMessage(msg);
+        setTimeout(() => setMessage(""), 3000);
+      };
+    
     // Update localStorage whenever userID changes
     const updateUserID = (newUserID,newUsername) => {
         if (newUserID) {
@@ -21,7 +26,7 @@ export const UserContextProvider=({children})=>{
         setUsername(newUsername);
     };
     return(
-        <UserContext.Provider value={{userID,username,setUser:updateUserID}}>
+        <UserContext.Provider value={{userID,username,setUser:updateUserID,flashMessage,setFlashMessage}}>
             {children}
         </UserContext.Provider>
     )

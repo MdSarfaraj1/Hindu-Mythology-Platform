@@ -4,7 +4,7 @@ const { isLoggedIn } = require("../Middleware/middlewares");
 const Stories = require("../Models/Stories");
 const { generateStory } = require("../Utils/generateStory");
 const router = express.Router({ mergeParams: true });
-router.get("/retrieve-topics", isLoggedIn, async (req, res) => {
+router.get("/retrieve-user-topics", isLoggedIn, async (req, res) => {
   try {
     let Notification = false;
     const user = req.user;
@@ -23,7 +23,11 @@ router.get("/retrieve-topics", isLoggedIn, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error checking topics" });
   }
-});
+}); 
+router.get("/retrieve_All_topics",async(req,res)=>{
+  const topic=await Topic.find({});
+  res.status(200).json({topic})
+})
 router.patch("/update-topics", isLoggedIn, async (req, res) => { // also save topic first time
   try {
     const { selectedTopics } = req.body;
@@ -73,7 +77,7 @@ router.patch("/update-topics", isLoggedIn, async (req, res) => { // also save to
     await user.save();
     return res.status(200).json({
       success: true,
-      message: "Topics saved successfully",
+      message: "Topics saved successfully", 
       data: user,
     });
   } catch (error) {
@@ -116,11 +120,16 @@ if (story && story.story) {
 router.post("/fact/save",isLoggedIn,async(req,res)=>{
   const user=req.user
   try{
-    let newStory=await Stories.create(req.body.facts)
+    let newStory = await Stories.create({
+      ...req.body.facts,
+      Expiry: req.body.Expiry ?? false, // Default to false if not provided
+    });
     await user.savedStories.push(newStory._id)
     await user.save()
+    console.log(newStory._id.toString())
     res.status(200).json({
-      message:"Story is Saved"
+      message:"Story is Saved",
+      id:newStory._id.toString()
     })
   }
   catch(err){
@@ -129,7 +138,20 @@ router.post("/fact/save",isLoggedIn,async(req,res)=>{
       message:"Topic is not present"
     })
   }
-  
-  
 })
+router.get("/getSharedStory/:storyId", async(req, res) => {
+  
+  const { storyId } = req.params;
+  try{
+     const story = await Stories.findById(storyId).select('-id -createdAt -Expiry -expiresAt -__v')  // Exclude these fields
+  res.status(200).json({
+    story:story})
+  }catch(e){
+    console.log("error occured from topic.js",e)
+    res.status(401).json({
+      message:"It seems like the story is no more exist"
+    })
+  }
+ 
+});
 module.exports = router;

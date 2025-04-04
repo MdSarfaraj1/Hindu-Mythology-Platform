@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .container {
+    margin: 20px;
+  }
+  
+  .sections {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .section {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    width: 250px;
+  }
+  
+  button {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .content {
+    margin: 20px;
+  }
+  

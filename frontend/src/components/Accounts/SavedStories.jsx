@@ -1,41 +1,110 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useAuth } from "../../Contex/Contex_Api";
+import SocialShare from "../Facts/SocialShare";
+
 function SavedStories() {
-    return (
-        <div className="container">
-            <h2 className="text-dark">Stories</h2>
-            <div class="accordion accordion-flush " id="accordionFlushExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                            Accordion Item #1
-                        </button>
-                    </h2>
-                    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+  let { userID } = useAuth();
+  const [Stories, setStories] = useState(null);
+  let [isStoryClicked, setIsStoryClicked] = useState(null);
+  const handleDelete = (storyID) => {
+    const deleteStory = async () => {
+      try {
+        await axios.post(
+          `http://localhost:8085/user/stories/delete`,
+          { storyID ,userID},
+          {
+            withCredentials: true,
+          }
+        );
+        setStories((prevStories) => prevStories.filter(story => story.id !== storyID));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    deleteStory();
+  };
+  const fetchStories = async () => {
+    try {
+      let response = await axios.get(
+        `http://localhost:8085/user/stories?userID=${userID}`,
+        {
+          withCredentials: true,
+        }
+      );
+      setStories(response.data.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchStories();
+  }, []);
+
+  return (
+    <div
+      className="container"
+      style={{ maxHeight: "500px", overflowY: "auto" }}
+    >
+      <h2 className="text-dark">Saved Stories</h2>
+      <div className="accordion " id="accordionStory">
+        {Stories ? (
+          Stories.map((obj, index) => (
+            <div className="accordion-item rounded-3  mb-3" key={index}>
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button collapsed  fw-bold "
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target={`#flush-collapse${index}`}
+                  aria-expanded={isStoryClicked === index}
+                  aria-controls={`flush-collapse${index}`}
+                  onClick={() =>
+                    setIsStoryClicked(isStoryClicked === index ? null : index)
+                  }
+                >
+                  {obj.heading}
+                  {isStoryClicked === index && (
+                    <i
+                      onClick={() => handleDelete(obj.id)}
+                      className="fa-solid fa-trash ms-5 link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                    ></i>
+                  )}
+                </button>
+              </h2>
+              {isStoryClicked === index && 
+              <SocialShare 
+              url={`http://localhost:5173/sharedStory/${obj.id}`}
+              text={`Check out this amazing story about  ${obj.heading}`} 
+              facts={""}/>}
+              <div
+                id={`flush-collapse${index}`}
+                className="accordion-collapse collapse"
+                data-bs-parent="#accordionStory"
+              >
+                <div
+                  className="accordion-body"
+                  style={{
+                    overflowY: "auto",
+                    padding: "15px",
+                  }}
+                >
+                  {obj.story.map((innerobj, i) => (
+                    <div key={i} className="mb-3">
+                      <h3 className="fw-semibold">{innerobj.head}</h3>
+                      <p className="text-muted">{innerobj.content}</p>
                     </div>
+                  ))}
                 </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                            Accordion Item #2
-                        </button>
-                    </h2>
-                    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                            Accordion Item #3
-                        </button>
-                    </h2>
-                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
-    )
+          ))
+        ) : (
+          <h3>Loading Stories...</h3>
+        )}
+      </div>
+    </div>
+  );
 }
-export default SavedStories
+
+export default SavedStories;
