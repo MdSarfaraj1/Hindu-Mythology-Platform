@@ -16,23 +16,23 @@ class NotificationController {
       //getting users
       const users = await User.find(
         { NotificationToken: { $ne: "" } },
-        { NotificationToken: 1, selectedTopics: 1, _id: 0 ,storyLanguage:1}
-      ).populate({ path: "selectedTopics", select: "name" }); 
+        { NotificationToken: 1, selectedTopics: 1, _id: 0, storyLanguage: 1 }
+      ).populate({ path: "selectedTopics", select: "name" });
 
-      let sendingStoryPromises = users.map(async (user) => { 
+      let sendingStoryPromises = users.map(async (user) => {
         const topics = user.selectedTopics.map((topic) => topic.name);
 
-        let story = await generateStory(topics.join(","),user.storyLanguage);
-      
-       let newStory= new Story(story) 
-       await newStory.save()
+        let story = await generateStory(topics.join(","), user.storyLanguage);
+
+        let newStory = new Story(story);
+        await newStory.save();
         const message = {
           notification: {
             title: story.heading,
             body: story.notification,
           },
           data: {
-            url: `http://localhost:5173/storyOfNotification?StoryId=${newStory._id}`, 
+            url: `http://localhost:5173/storyOfNotification?StoryId=${newStory._id}`,
           },
           token: user.NotificationToken,
         };
@@ -49,8 +49,6 @@ class NotificationController {
       console.error("Error sending notifications:", error);
       return { success: false, message: "Failed to send notifications" };
     }
-
-   
   }
 
   // Save user's Firebase token

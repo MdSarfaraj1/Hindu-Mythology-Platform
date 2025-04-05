@@ -4,7 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.gemini_api_key);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
  
 
-module.exports.generateStory = async (topics, language) => {
+exports.generateStory = async (topics, language) => {
   try {
     const prompt = `Generate a captivating heading and a vivid, immersive story based on a topic from ${topics}, including Indian epics, mythology, folklore, or speculative mythology. The story should be written in the language  ${language} and can revolve around themes like redemption, forbidden knowledge, destiny versus free will, or unsung heroes or any random story that you want to provide. 
 
@@ -22,6 +22,7 @@ The structure must include the following elements:
 Include a magical object, a celestial prophecy, or an unexpected betrayal to add intrigue, and ensure the story brings out the richness of Indian mythology while offering something fresh and engaging. Stories should highlight unsung heroes or unexpected perspectives, and the writing style should align with the chosen language for cultural depth.
 `;
     const resultt = await model.generateContent(prompt);
+   
 const response=resultt.response.text()
 const parts = response.split(/\*\*[^*]+:\*\*/).map(part => part.trim());
 
@@ -40,3 +41,6 @@ for (let i = 3; i < parts.length; i += 2) {
     console.error("Error generating story:", error);
   }
 };
+
+
+

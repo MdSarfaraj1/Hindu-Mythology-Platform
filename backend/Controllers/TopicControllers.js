@@ -9,17 +9,22 @@ class TopicController {
         try {
       const hasNotifications = !!user.NotificationToken; // double not operator converts any value to boolean
       
-      if (user && user.selectedTopics && user.selectedTopics.length > 0) {
-        return {
-          Notification_Status: hasNotifications,
-          topics: user.selectedTopics,
-        };
-      } else {
-        return { 
-          Notification_Status: hasNotifications, 
-          topics: [] 
-        };
-      }
+      const topic=user?.selectedTopics?.length>0?user.selectedTopics:[]
+      return {
+        Notification_Status: hasNotifications,
+        topics:topic
+      };
+      // if (user && user.selectedTopics && user.selectedTopics.length > 0) {
+      //   return {
+      //     Notification_Status: hasNotifications,
+      //     topics: user.selectedTopics,
+      //   };
+      // } else {
+      //   return { 
+      //     Notification_Status: hasNotifications, 
+      //     topics: [] 
+      //   };
+      // }
     } catch (error) {
       throw new Error("Error retrieving user topics: " + error.message);
     }
@@ -29,43 +34,30 @@ class TopicController {
    static async updateTopics(user, selectedTopics) {
     try {
       // Get existing topic names from user's current selection
-      const existingTopicNames = user.selectedTopics.map((topic) => topic.name);
+      const existingTopicNames = (user.selectedTopics||[]).map((topic) => topic.name);
       
       // Identify topics to add and remove
-      const topicsToAdd = selectedTopics.filter(
-        (topicName) => !existingTopicNames.includes(topicName)
-      );
-      const topicsToRemove = existingTopicNames.filter(
-        (topicName) => !selectedTopics.includes(topicName)
-      );
+      const topicsToAdd = selectedTopics.filter((topicName) => !existingTopicNames.includes(topicName));
+      const topicsToRemove = existingTopicNames.filter((topicName) => !selectedTopics.includes(topicName));
 
       // Create new topics entry
       const addedTopicIds = await Promise.all(
         topicsToAdd.map(async (topicName) => {
           let topic = await Topic.findOne({ name: topicName });
-          if (!topic) {
-            // Create a new topic with usercount initialized to 1
-            topic = await Topic.create({ name: topicName, usercount: 1 });
-          } else {
             // Increment usercount for existing topic
             topic.usercount += 1;
             await topic.save();
-          }
+    
           return topic._id; // Return the topic ID
         })
       );
-
       // For handling topic's user count
-      await Promise.all(
-        topicsToRemove.map(async (topicName) => {
-          const topic = await Topic.findOne({ name: topicName });
-          if (topic && topic.usercount > 0) {
-            // Decrement usercount only if it is greater than 0
-            topic.usercount -= 1;
-            await topic.save();
-          }
-        })
-      );
+      if (topicsToRemove.length > 0) {
+        await Topic.updateMany(
+          { name: { $in: topicsToRemove }, usercount: { $gt: 0 } },
+          { $inc: { usercount: -1 } }
+        );
+      }
 
       user.selectedTopics = [
         ...user.selectedTopics.filter((topic) => !topicsToRemove.includes(topic.name)) // Remove deselected topics

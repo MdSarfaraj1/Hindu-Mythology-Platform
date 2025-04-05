@@ -2,10 +2,31 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../Models/User");
 const Stories = require("../Models/Stories");
+const { transporter } = require("../Utils/mailTransporter");
+
+exports.verifyemail=async(req, res) => {
+  try{ 
+     const { email } = req.body;
+     const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+  const mailOptions = {
+    from: process.env.EMAIL_USERNAME,
+    to: email,
+    subject: "Verification of email",
+    html: `<p>Here is the otp to verify your email</p>
+          <p>OTP: ${otp}</p> `}
+  await transporter.sendMail(mailOptions);
+  res.status(200).json({OTP:otp})
+  }catch (error) {
+  console.error(error);
+  res.status(500).json({ message: "Error in password reset request" });
+}
+}
 
 exports.signup = async (req, res) => {
     try {
       const data = req.body;
+      if(!data.username||!data.password||!data.email)  //if bypassed the frontend
+        return res.status(422).json({message:"Please provide all details"})
       let existingUser = await User.findOne({
         $or: [{ email: data.email }, { username: data.username }],
       });
