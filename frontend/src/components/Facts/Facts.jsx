@@ -1,7 +1,7 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import SocialShare from "./SocialShare";
 
 function Facts() {
@@ -70,8 +70,17 @@ function Facts() {
 
   return (
     <div className="container my-5">
-      <h1 className="text-center display-4 text-primary mb-4">{`Stories from ${topic}`}</h1>
-      <div className="card shadow-lg border-0 rounded ">
+      <div className="position-fixed top-0  w-100 bg-white start-0 py-3  " style={{ zIndex: 1050 }}>
+    <div className="container d-flex justify-content-between align-items-center">
+      <Link to="/dashboard" className="btn btn-outline-secondary ">
+        <i className="bi bi-arrow-left me-2"></i>Back to Dashboard
+      </Link>
+      <h1 className="text-primary m-2 fs-4">{`Stories from ${topic}`}</h1>
+     <div></div>
+    </div>
+  </div>
+  <div style={{ marginTop: "80px" }}></div>
+      <div className="card shadow-lg border-0 rounded mt-5 ">
         <div className="card-body mt-5">
           <div className="row justify-content-center">
             <div className="col-lg-8">
@@ -199,11 +208,11 @@ function Facts() {
               >
                 Share <i class="bi bi-share"></i>
               </button>
-              {savingStory ?  (
+              {savingStory ? (
                 <div class="spinner-grow text-success ms-5 mt-5" role="status">
                   <span class="visually-hidden">Loading...</span>
                 </div>
-              ):(
+              ) : (
                 <div
                   className="ms-5 mt-5 rounded-circle btn btn-success  d-inline p-2 "
                   data-bs-toggle="tooltip"
@@ -213,12 +222,12 @@ function Facts() {
                 >
                   <i class="bi bi-floppy "></i>
                 </div>
-              ) }
+              )}
               {share && (
                 <SocialShare
                   url={`http://localhost:5173/sharedStory/`}
                   text={`Check out this amazing stoty from  ${topic}:  ${facts.heading}`}
-                  facts={facts}// using this because user didnot save story but willing to share
+                  facts={facts} // using this because user didnot save story but willing to share
                 />
               )}
             </div>

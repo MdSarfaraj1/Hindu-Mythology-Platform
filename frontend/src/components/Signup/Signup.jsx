@@ -6,18 +6,48 @@ import { useAuth } from "../../Contex/Contex_Api";
 function Signup() {
   const { setUser } = useAuth()
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ username: "",email: "",password: ""});
+  const [otpSent, setOtpSent] = useState(false);
+const [serverOtp, setServerOtp] = useState(""); 
+const [enteredOtp, setEnteredOtp] = useState("");
+const [emailVerified, setEmailVerified] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
+  const [disableSignup,setDisableSignup]=useState(false)
 
+
+  const handleEmailVErification=async () => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setMessage({ text: "Please enter a valid email", type: "error" });
+      return;
+    }
+
+    try {
+      setOtpSent(true);
+      const res = await axios.post("http://localhost:8085/user/verify-email", {
+        email: formData.email,
+      });
+      
+      setServerOtp(res.data.OTP); // Save OTP returned from backend
+      setMessage({ text: "OTP sent to your email", type: "success" });
+    } catch (err) {
+      setOtpSent(false)
+      setMessage({ text: "Failed to send OTP", type: "error" });
+    }
+  }
+  
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!formData.username||!formData.password||!formData.email)
+    {
+      setMessage({ text: 'Please Provide all details', type: '' })
+      return
+    }
+    if(!emailVerified)
+    {setMessage({ text: 'Please Verify the email first', type: '' })
+     return}
     setMessage({ text: '', type: '' }); // Reset message
 
     try {
@@ -35,20 +65,12 @@ function Signup() {
       }
     } catch (error) {
       if (error.response) {
-        switch (error.response.status) {
-          case 409:
-            setMessage({
-              text: error.response.data.message,
-              type: 'error'
-            });
-            break;
-          default:
-            setMessage({
-              text: error.response.data.message || 'Something went wrong. Please try again later.',
+        setMessage({
+              text: error.response.data.message|| 'Something went wrong. Please try again later.',
               type: 'error'
             });
         }
-      } else {
+       else {
         setMessage({
           text: 'Network error. Please check your connection.',
           type: 'error'
@@ -56,6 +78,8 @@ function Signup() {
       }
     }
   };
+
+
   return (
     <div
       className="min-vh-100 d-flex align-items-center"
@@ -80,10 +104,11 @@ function Signup() {
                 <h2 className="text-center text-white mb-4">Create Account</h2>
                 {message.text && (
                   <div
-                    className={`alert ${message.type === "success"
+                    className={`alert ${
+                      message.type === "success"
                         ? "alert-success"
                         : "alert-danger"
-                      } mb-3`}
+                    } mb-3`}
                   >
                     {message.text}
                   </div>
@@ -106,24 +131,64 @@ function Signup() {
                     />
                     <div className="valid-feedback">username looks good</div>
                     <div className="invalid-feedback">
-
                       Please choose a username.
                     </div>
                   </div>
 
                   <div className="mb-3">
                     <input
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        handleInputChange(e);
+                      }}
                       name="email"
                       type="email"
-                      className="form-control  text-black"
+                      className="form-control text-black"
                       placeholder="Email Address"
                       style={{ border: "1px solid rgba(255, 255, 255, 0.2)" }}
                       value={formData.email}
                       required
+                      disabled={emailVerified}
                     />
-                  </div>
+                    {!otpSent && <button
+                      type="button"
+                      className="btn btn-sm btn-outline-info"
+                      onClick={handleEmailVErification}
+                      disabled={emailVerified}
+                    >
+                      {emailVerified ? "Verified" : "Verify"}
+                    </button>}
+                  </div> 
+                   
 
+                  {otpSent && !emailVerified && (
+                    <div className="mb-3">
+                      <input
+                        type="text"
+                        placeholder="Enter OTP"
+                        className="form-control text-black"
+                        value={enteredOtp}
+                        onChange={(e) => setEnteredOtp(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-success btn-sm mt-2"
+                        onClick={() => {
+                          if (enteredOtp === serverOtp) {
+                            setEmailVerified(true);
+                            setOtpSent(false)
+                            setMessage({
+                              text: "Email verified successfully!",
+                              type: "success",
+                            });
+                          } else {
+                            setMessage({ text: "Invalid OTP", type: "error" });
+                          }
+                        }}
+                      >
+                        Submit OTP
+                      </button>
+                    </div>
+                  )}
                   <div className="mb-4">
                     <input
                       onChange={handleInputChange}
@@ -136,7 +201,6 @@ function Signup() {
                       required
                     />
                   </div>
-                 
 
                   <button
                     type="submit"

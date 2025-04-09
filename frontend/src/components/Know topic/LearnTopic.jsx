@@ -103,9 +103,10 @@ function LearnTopic() {
               </div>
             </div>
           </div>
+          
           <div className="col-2">
             {/* Image Section in Sidebar */}
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <h3 className="h5 mb-3">Related Images</h3>
               <div className="d-flex flex-column gap-3">
                 {topicData.images.map((image, index) => (
@@ -117,7 +118,7 @@ function LearnTopic() {
                   />
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
