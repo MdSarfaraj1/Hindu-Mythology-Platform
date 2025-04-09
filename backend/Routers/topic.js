@@ -2,7 +2,7 @@ const express = require("express");
 const Topic = require("../Models/Topics");
 const { isLoggedIn } = require("../Middleware/middlewares");
 const Stories = require("../Models/Stories");
-
+const {generateResponse}=require("../Utils/AskQuestion")
 const TopicController = require("../Controllers/TopicControllers");
 const router = express.Router({ mergeParams: true });
 
@@ -47,6 +47,20 @@ router.get("/learn/NotificationStory", async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 });
+
+router.post("/askQuestion",async(req,res)=>{
+  const { question, topic } = req.body;
+  try {
+    const response = await generateResponse(question, topic);
+    console.log(response)
+    res.json({AIresponse: response });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'Failed to generate response' });
+  }
+});
+
+
 // Save a fact/story
 router.post("/fact/save", isLoggedIn, async (req, res) => {
   try {
