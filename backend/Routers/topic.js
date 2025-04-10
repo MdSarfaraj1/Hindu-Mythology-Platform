@@ -52,7 +52,6 @@ router.post("/askQuestion",async(req,res)=>{
   const { question, topic } = req.body;
   try {
     const response = await generateResponse(question, topic);
-    console.log(response)
     res.json({AIresponse: response });
   } catch (error) {
     console.log(error)

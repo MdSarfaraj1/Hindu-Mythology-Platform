@@ -1,69 +1,97 @@
-import React, { useEffect } from "react";
-import {useState} from "react"
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-function SocialShare({ url, text ,facts}) {
-  const [shareurl,seturl]=useState(url)
+import { Link } from "react-router-dom";
+
+function SocialShare({ url, text, facts }) {
+  const [shareUrl, setShareUrl] = useState(url);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    if (!facts) return; // Ensure facts exist before making the request
+    if (!facts) return; 
 
     const handleSaveStory = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.post("http://localhost:8085/topics/fact/save", {
           facts,
-          Expiry:true
+          Expiry: true
         });
 
         if (response.status === 200) {
-          seturl(shareurl + response.data.id);
-          console.log("Updated URL:", shareurl); // This will still show old value due to async state update
+          const newUrl = url + response.data.id;
+          setShareUrl(newUrl);
         }
       } catch (err) {
         console.error("Error saving story:", err);
+        setError("Failed to create sharing link");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     handleSaveStory();
-  }, [facts]);
-  const encodedUrl = encodeURIComponent(shareurl);
+  }, [facts, url]);
+
+  const encodedUrl = encodeURIComponent(shareUrl);
   const encodedText = encodeURIComponent(text);
 
-  return (
-    <div className="mt-4  ">
-      <div className="d-flex justify-content-center rounded-circle mb-3 ">
-        {/* Facebook Share Button */}
-        <a
-          href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Facebook"
-          className="btn btn-primary mx-2 rounded-circle"
-        
-        >
-          <i className="fab fa-facebook-f "></i> 
-        </a>
-        {/* Twitter Share Button */}
-        <a
-          href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Twitter"
-          className="btn btn-info mx-2  rounded-circle"
-         
-        >
-          <i className="bi bi-twitter " style={{ color: "white" }}></i> 
-        </a>
-        {/* WhatsApp Share Button */}
-        <a
-          href={`https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`}
-          target="_blank"
-          title="Watsapp"
-          rel="noopener noreferrer"
-          className="btn btn-success mx-2   rounded-circle"
-          
-        >
-          <i className="fab fa-whatsapp "></i>
-        </a>
+  if (error) {
+    return (
+      <div className="alert alert-danger">
+        <i className="bi bi-exclamation-triangle me-2"></i>
+        {error}
       </div>
+    );
+  }
+
+  return (
+    <div >
+          <div className="d-flex justify-content-center flex-wrap gap-2 my-3">
+            {/* Facebook Share Button */}
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+              title="Share on Facebook"
+              className="btn btn-outline-dark"
+              aria-label="Share on Facebook"
+            >
+              <i className="fab fa-facebook-f"></i>
+              <span className="ms-2 d-none d-md-inline">Facebook</span>
+            </a>
+
+            {/* Twitter Share Button */}
+            <a
+              href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`}
+              title="Share on Twitter"
+              className="btn btn-outline-dark "
+              aria-label="Share on Twitter"
+            >
+              <i className="bi bi-twitter"></i>
+              <span className="ms-2 d-none d-md-inline">Twitter</span>
+            </a>
+
+            {/* WhatsApp Share Button */}
+            <a
+              href={`https://api.whatsapp.com/send?text=${encodedText}%20${encodedUrl}`}
+              title="Share on WhatsApp"
+              className="btn btn-outline-dark"
+              aria-label="Share on WhatsApp"
+            >
+              <i className="fab fa-whatsapp"></i>
+              <span className="ms-2 d-none d-md-inline">WhatsApp</span>
+            </a>
+
+            {/* LinkedIn Share Button */}
+            <a
+              href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedText}`}
+              title="Share on LinkedIn"
+              className="btn btn-outline-dark "
+              aria-label="Share on LinkedIn"
+            >
+              <i className="fab fa-linkedin-in"></i>
+              <span className="ms-2 d-none d-md-inline">LinkedIn</span>
+            </a>
+
+          </div>
     </div>
   );
 }
