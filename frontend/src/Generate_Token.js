@@ -13,7 +13,7 @@ export const request_Notification_Permission = async (userID) => {
   });
   try {
     const response =await  axios.post(
-      `http://localhost:8085/Notification/save_firebaseToken`,
+      `${import.meta.env.VITE_APP_BACKEND_URL}/Notification/save_firebaseToken`,
       { token, userID },
       { withCredentials: true }
     );
@@ -32,7 +32,7 @@ export const denied_Notification_Permission = async (userID) => {
   try {
     console.log("i am from denied_Notification_Permission ");
     const response = axios.delete(
-      "http://localhost:8085/Notification/remove_firebaseToken",
+      `${import.meta.env.VITE_APP_BACKEND_URL}/Notification/remove_firebaseToken`,
       {
         params: {
           userID: userID,

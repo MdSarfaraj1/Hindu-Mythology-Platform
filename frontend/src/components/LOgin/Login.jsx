@@ -21,7 +21,7 @@ function Login() {
     const loginData = formData;
     setMessage({ text: "", type: "" });
     try {
-      const response = await axios.post("http://localhost:8085/user/login", loginData, {
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/login`, loginData, {
         withCredentials: true,
       });
       setMessage({

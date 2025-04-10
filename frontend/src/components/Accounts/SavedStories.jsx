@@ -11,7 +11,7 @@ function SavedStories() {
     const deleteStory = async () => {
       try {
         await axios.post(
-          `http://localhost:8085/user/stories/delete`,
+          `${import.meta.env.VITE_APP_BACKEND_URL}/user/stories/delete`,
           { storyID ,userID},
           {
             withCredentials: true,
@@ -27,7 +27,7 @@ function SavedStories() {
   const fetchStories = async () => {
     try {
       let response = await axios.get(
-        `http://localhost:8085/user/stories?userID=${userID}`,
+        `${import.meta.env.VITE_APP_BACKEND_URL}/user/stories?userID=${userID}`,
         {
           withCredentials: true,
         }

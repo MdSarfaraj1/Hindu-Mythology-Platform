@@ -12,7 +12,7 @@ function SocialShare({ url, text, facts }) {
     const handleSaveStory = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.post("http://localhost:8085/topics/fact/save", {
+        const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/fact/save`, {
           facts,
           Expiry: true
         });

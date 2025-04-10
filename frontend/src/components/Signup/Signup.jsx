@@ -23,7 +23,7 @@ const [emailVerified, setEmailVerified] = useState(false);
 
     try {
       setOtpSent(true);
-      const res = await axios.post("http://localhost:8085/user/verify-email", {
+      const res = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/verify-email`, {
         email: formData.email,
       });
       
@@ -51,7 +51,7 @@ const [emailVerified, setEmailVerified] = useState(false);
     setMessage({ text: '', type: '' }); // Reset message
 
     try {
-      const response = await axios.post("http://localhost:8085/user/signup", formData);
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/signup`, formData);
 
       if (response.status === 201) {
         setMessage({

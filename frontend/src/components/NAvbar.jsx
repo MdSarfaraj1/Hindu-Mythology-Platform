@@ -7,7 +7,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8085/user/logout",
+        `${import.meta.env.VITE_APP_BACKEND_URL}/user/logout`,
         {},
         {
           withCredentials: true,

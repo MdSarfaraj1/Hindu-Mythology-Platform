@@ -12,11 +12,11 @@ function StoryOfNotification() {
   const [share, setShare] = useState(false);
   const [savingStory, setSavingStory] = useState(false);
   const [savedStoryMessage, setSavedStoryMessage] = useState(false);
- 
+
   const handleSaveStory = async() => {
     setSavingStory(true);
     try {
-      const response = await axios.post("http://localhost:8085/topics/fact/save", {
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/fact/save`, {
         facts,
       });
       if (response.status === 200) {
@@ -33,7 +33,7 @@ function StoryOfNotification() {
     const fetchNotificationStory = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8085/topics/learn/NotificationStory`,
+          `${import.meta.env.VITE_APP_BACKEND_URL}/topics/learn/NotificationStory`,
           { params: { StoryId } }
         );
         setFacts(response.data);

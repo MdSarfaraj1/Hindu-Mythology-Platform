@@ -7,7 +7,7 @@ const Hero = () => {
   useEffect(() => {
     async function checkSession() {
       try {
-        const res = await axios.get("http://localhost:8085/user/verify-token", {
+        const res = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/user/verify-token`, {
           method: "GET",
           credentials: "include",
         });

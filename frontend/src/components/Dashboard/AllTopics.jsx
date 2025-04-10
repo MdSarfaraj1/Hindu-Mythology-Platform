@@ -31,7 +31,7 @@ const AllTopics = () => {
   ]);
   useEffect(() => {  // retrieving all topic
     axios
-      .get("http://localhost:8085/topics/retrieve_All_topics")
+      .get(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/retrieve_All_topics`)
       .then((response) => {
         setTopics(response.data.topic);
       });
@@ -41,7 +41,7 @@ const AllTopics = () => {
       if (userID) {
         try {
           const response = await axios.get(
-            "http://localhost:8085/topics/retrieve-user-topics",
+            `${import.meta.env.VITE_APP_BACKEND_URL}/topics/retrieve-user-topics`,
             {
               withCredentials: true,
             }
@@ -66,7 +66,7 @@ const AllTopics = () => {
     if (selectedTopics.length > 0) {
       try {
         const response = await axios.patch(
-          "http://localhost:8085/topics/update-topics",
+          `${import.meta.env.VITE_APP_BACKEND_URL}/topics/update-topics`,
           { userID, selectedTopics },
           {
             withCredentials: true,

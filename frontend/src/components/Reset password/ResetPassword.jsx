@@ -13,7 +13,7 @@ function ResetPassword() {
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8085/forget-password", { email });
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/forget-password`, { email });
       setMessage({ text: response.data.message, type: "success" });
       setStep(2);
     } catch (error) {
@@ -27,7 +27,7 @@ function ResetPassword() {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8085/forget-password/verify-otp", { email, otp });
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/forget-password/verify-otp`, { email, otp });
       setMessage({ text: response.data.message, type: "success" });
       setStep(3);
     } catch (error) {
@@ -41,7 +41,7 @@ function ResetPassword() {
   const handlePasswordReset = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8085/set-new-password", {
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/set-new-password`, {
         email,
         otp,
         newPassword

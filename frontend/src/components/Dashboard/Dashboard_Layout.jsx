@@ -58,7 +58,7 @@ const Dashboard_Layout = () => {
     if (selectedTopics.length > 0) {
       try {
         const response = await axios.patch(
-          "http://localhost:8085/topics/update-topics",
+          `${import.meta.env.VITE_APP_BACKEND_URL}/topics/update-topics`,
           { userID, selectedTopics },
           {
             withCredentials: true,

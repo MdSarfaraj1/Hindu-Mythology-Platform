@@ -12,7 +12,7 @@ function Profile() {
 useEffect(()=>{
     async function fetchData(){
         try{
-            let response=await axios.post("http://localhost:8085/user/profile",{userID});
+            let response=await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/profile`,{userID});
             setUserProfile(response.data);
         }catch(error){
             console.error("Profile Fetch error:", error);
@@ -33,7 +33,7 @@ useEffect(()=>{
   const handleSubmit = (e) => {
     e.preventDefault();
 try{
-   let response= axios.post("http://localhost:8085/user/update",{ userProfile,userID});
+   let response= axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/update`,{ userProfile,userID});
    alert("Profile Updated Successfully");
 }catch(error){
     console.error("Update error:", error);

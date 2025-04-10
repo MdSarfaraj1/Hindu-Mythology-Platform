@@ -21,7 +21,7 @@ function Facts() {
   const handleSaveStory = async () => {
    
     try {
-      const response = await axios.post("http://localhost:8085/topics/fact/save", {
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/fact/save`, {
         facts,
       });
       if (response.status === 200) {
@@ -38,7 +38,7 @@ function Facts() {
     const fetchFacts = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8085/topics/learn/facts/`, { params: { topic } }
+          `${import.meta.env.VITE_APP_BACKEND_URL}/topics/learn/facts/`, { params: { topic } }
         );
         setFacts(response.data);
         setLoading(false);

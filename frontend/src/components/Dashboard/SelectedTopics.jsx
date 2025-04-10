@@ -14,7 +14,7 @@ const SelectedTopics = ({ userID }) => {
       if (userID) {
         try {
           const response = await axios.get(
-            "http://localhost:8085/topics/retrieve-user-topics",
+            `${import.meta.env.VITE_APP_BACKEND_URL}/topics/retrieve-user-topics`,
             {
               withCredentials: true,
             }
