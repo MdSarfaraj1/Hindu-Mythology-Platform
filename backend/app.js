@@ -42,14 +42,14 @@ app.use("/topics", topicRouter);
 app.use("/Notification", notificationRouter);
 
 // Schedule notifications
-// schedule.scheduleJob("*/1 * * * *", async () => {
-//   console.log("Sending notifications...");
-//   try {
-//     await NotificationController.sendNotifications();
-//   } catch (error) {
-//     console.error("Failed to send scheduled notifications:", error);
-//   }
-// });
+schedule.scheduleJob("*/1 * * * *", async () => {
+  console.log("Sending notifications...");
+  try {
+    await NotificationController.sendNotifications();
+  } catch (error) {
+    console.error("Failed to send scheduled notifications:", error);
+  }
+});
 
 // Connect to database and start server
 const startServer = async () => {

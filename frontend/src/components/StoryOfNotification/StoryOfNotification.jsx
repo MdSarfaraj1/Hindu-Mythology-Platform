@@ -11,6 +11,7 @@ function StoryOfNotification() {
   const [error, setError] = useState(null);
   const [share, setShare] = useState(false);
   const [savingStory, setSavingStory] = useState(false);
+  const [savedStoryMessage, setSavedStoryMessage] = useState(false);
  
   const handleSaveStory = async() => {
     setSavingStory(true);
@@ -18,13 +19,16 @@ function StoryOfNotification() {
       const response = await axios.post("http://localhost:8085/topics/fact/save", {
         facts,
       });
-      if (response.status == 200) 
-        setSavedStoryMassege(true);
+      if (response.status === 200) {
+        setSavedStoryMessage(true);
+        setTimeout(() => setSavedStoryMessage(false), 3000); // Hide message after 3 seconds
+      }
     } catch (err) {
       console.log(err);
     }
     setSavingStory(false);
   };
+
   useEffect(() => {
     const fetchNotificationStory = async () => {
       try {
@@ -35,22 +39,22 @@ function StoryOfNotification() {
         setFacts(response.data);
       } catch (err) {
         if (err.response) {
-          // Server responded with a status outside 2xx range
           console.error("Error Response:", err.response.data);
-          setError(err.response.data.message); // Display error message from backend
+          setError(err.response.data.message);
         }
         else {
-        console.log(err);}
+          console.log(err);
+        }
       }
     };
   
     fetchNotificationStory();
-  }, []);
- 
+  }, [StoryId]);
 
   if (error) {
     return (
-      <div className="alert alert-danger text-center my-4">
+      <div className="alert alert-danger text-center my-5 shadow-sm rounded-3 mx-auto" style={{ maxWidth: "800px" }}>
+        <i className="bi bi-exclamation-triangle-fill me-2"></i>
         <strong>Error:</strong> {error}
       </div>
     );
@@ -68,152 +72,79 @@ function StoryOfNotification() {
 
   return (
     <div className="container my-5">
-      <div className="card shadow-lg border-0 rounded ">
-        <div className="card-body mt-5">
+      <div className="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div className="card-body mt-4 px-md-4">
           <div className="row justify-content-center">
-            <div className="col-lg-8">
-              {/* Carousel */}
-              <div
-                id="carouselExampleCaptions"
-                className="carousel slide mb-4  "
-                data-bs-ride="carousel"
-              >
-                <div className="carousel-indicators">
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleCaptions"
-                    data-bs-slide-to="0"
-                    className="active"
-                    aria-current="true"
-                    aria-label="Slide 1"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleCaptions"
-                    data-bs-slide-to="1"
-                    aria-label="Slide 2"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleCaptions"
-                    data-bs-slide-to="2"
-                    aria-label="Slide 3"
-                  ></button>
-                </div>
-                <div className="carousel-inner">
-                  <div className="carousel-item active">
-                    <img
-                      src="/Topic images/puranas.jpg"
-                      className="d-block w-100 rounded"
-                      alt="Puranas"
-                      style={{ objectFit: "cover", height: "400px" }}
-                    />
-                    <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded">
-                      <h5>First slide label</h5>
-                      <p>
-                        Some representative placeholder content for the first
-                        slide.
-                      </p>
-                    </div>
+            <div className="col-lg-10">
+            <div >
+              <img
+                src="/Topic images/mahabharata.jpg"
+                className="img-fluid"
+                alt="Mahabharata"
+                style={{ objectFit: "cover", width: "100%", height: "450px" }}
+              />
+            </div>
+              <h2 className="card-title text-primary fw-bold mb-4 mt-1 display-5">{facts.heading}</h2>
+              <div className="story-sections">
+                {facts.story.map((section, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 p-4 border-0 rounded-3 bg-light shadow-sm"
+                    style={{ 
+                      transition: "transform 0.3s ease", 
+                      cursor: "pointer",
+                      position: "relative",
+                      zIndex: 1
+                    }}
+                    onMouseOver={(e) => {e.currentTarget.style.transform = "translateY(-5px)"}}
+                    onMouseOut={(e) => {e.currentTarget.style.transform = "translateY(0)"}}
+                  >
+                    <h5 className="text-secondary fw-bold mb-3">{section.head}</h5>
+                    <p className="mb-0 text-dark">{section.content}</p>
                   </div>
-                  <div className="carousel-item">
-                    <img
-                      src="/Topic images/mahabharata.jpg"
-                      className="d-block w-100 rounded"
-                      alt="Mahabharata"
-                      style={{ objectFit: "cover", height: "400px" }}
-                    />
-                    <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded">
-                      <h5>Second slide label</h5>
-                      <p>
-                        Some representative placeholder content for the second
-                        slide.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="carousel-item">
-                    <img
-                      src="/Topic images/ramayana.jpg"
-                      className="d-block w-100 rounded"
-                      alt="Ramayana"
-                      style={{ objectFit: "cover", height: "400px" }}
-                    />
-                    <div className="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded">
-                      <h5>Third slide label</h5>
-                      <p>
-                        Some representative placeholder content for the third
-                        slide.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  className="carousel-control-prev"
-                  type="button"
-                  data-bs-target="#carouselExampleCaptions"
-                  data-bs-slide="prev"
-                >
-                  <span
-                    className="carousel-control-prev-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Previous</span>
-                </button>
-                <button
-                  className="carousel-control-next"
-                  type="button"
-                  data-bs-target="#carouselExampleCaptions"
-                  data-bs-slide="next"
-                >
-                  <span
-                    className="carousel-control-next-icon"
-                    aria-hidden="true"
-                  ></span>
-                  <span className="visually-hidden">Next</span>
-                </button>
+                ))}
               </div>
-              {/* Facts */}
-              <h2 className="card-title text-primary">{facts.heading}</h2>
-              {facts.story.map((section, index) => (
-                <div
-                  key={index}
-                  className="mb-4 p-3 border rounded bg-light shadow-sm"
+
+              <div className="d-flex align-items-center mt-4 flex-wrap">
+                <button
+                  className="btn btn-primary me-3 mb-3 "
+                  onClick={() => setShare((prev) => !prev)}
                 >
-                  <h5 className="text-secondary">{section.head}</h5>
-                  <p>{section.content}</p>
-                </div>
-              ))}
-              {/* Share and Save */}
-              <button
-                className="btn btn-outline-primary mt-3 ms-2"
-                onClick={() => setShare((prev) => !prev)}
-              >
-                Share <i class="bi bi-share"></i>
-              </button>
-              {savingStory ?  (
-                <div class="spinner-grow text-success ms-5 mt-5" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div> 
-              ):(
-                <div
-                  className="ms-5 mt-5 rounded-circle btn btn-success  d-inline p-2 "
-                  data-bs-toggle="tooltip"
-                  data-bs-placement="top"
-                  data-bs-title="Tooltip on top"
+                  <i className="bi bi-share-fill me-2"></i> Share
+                </button>
+                
+                <button
+                  className="btn btn-success me-3 mb-3 d-flex align-items-center"
                   onClick={handleSaveStory}
+                  disabled={savingStory}
+                > <i className="bi bi-bookmark-fill me-2"></i> Save Story</button>
+                
+                <Link 
+                  to="/dashboard" 
+                  className="btn btn-outline-secondary mb-3 "
                 >
-                  <i class="bi bi-floppy "></i>
-                </div>
-              ) }
+                  <i className="bi bi-arrow-left me-2"></i> Go to Dashboard
+                </Link>
+
+                {/* Save confirmation message */}
+                {savedStoryMessage && (
+                  <div className="ms-3 alert alert-success mb-3 py-2 px-3 d-inline-block">
+                    <i className="bi bi-check-circle-fill me-2"></i>
+                    Story saved successfully!
+                  </div>
+                )}
+              </div>
+
+              {/* Social Share Component */}
               {share && (
-                <SocialShare
-                  url={window.location.href}
-                  text={`Check out this amazing stoty from  Hindu Mythology:  ${facts.heading}`}
-                />
+                <div className="mt-4 p-3 bg-light rounded-3 shadow-sm border">
+                  <h6 className="mb-3">Share this story:</h6>
+                  <SocialShare
+                    url={window.location.href}
+                    text={`Check out this amazing story from Hindu Mythology: ${facts.heading}`}
+                  />
+                </div>
               )}
-            
-                <Link to={"/dashboard"} className="ms-5">Go to Dashboard </Link>
-             
             </div>
           </div>
         </div>
@@ -221,6 +152,5 @@ function StoryOfNotification() {
     </div>
   );
 }
-
 
 export default StoryOfNotification;

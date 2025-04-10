@@ -93,7 +93,6 @@ function Facts() {
       <div className="container py-5 mt-5">
         <div className="card shadow border-0 rounded-lg overflow-hidden">
           <div className="card-body p-0">
-            {/* Carousel */}
             <div className="text-center">
               <img
                 src="/Topic images/mahabharata.jpg"
