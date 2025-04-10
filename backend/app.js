@@ -1,5 +1,4 @@
 require("dotenv").config();
-const OpenAI = require("openai");
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -14,19 +13,13 @@ const topicRouter = require("./Routers/topic");
 const passwordRouter = require("./Routers/forgetPassword");
 const notificationRouter = require("./Routers/Notification");
 
-// Import controllers
+// Import controllers  
 const NotificationController = require("./Controllers/Notification");
 
 // Initialize express app
 const app = express();
 const port = process.env.PORT;
-
-// Initialize OpenAI configuration
-const openai = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY,
-  baseURL: "https://api.groq.com/openai/v1",
-});
-
+ 
 // Middleware
 app.use(express.json());
 app.use(cors({

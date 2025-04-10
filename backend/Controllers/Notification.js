@@ -1,8 +1,9 @@
+require('dotenv').config();
 const User = require("../Models/User");
 const Story =require("../Models/Stories")
 const admin = require("firebase-admin");
-const serviceAccount = require("../firbase_admin.json");
 const { generateStory } = require("../Utils/generateStory");
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 // Initialize Firebase Admin once
 admin.initializeApp({
