@@ -34,7 +34,9 @@ function TopicChatbot({ topic  }) {
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
+    if (messages.length > 1) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }
   }, [messages]);
   const handleEnterKeyPress = (e) => {
     if (e.key === 'Enter') {

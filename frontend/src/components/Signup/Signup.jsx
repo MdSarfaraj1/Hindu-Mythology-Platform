@@ -1,4 +1,5 @@
-import { forwardRef, useState } from "react";
+import { useState } from "react";
+import validator from 'validator';
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../Contex/Contex_Api";
@@ -12,11 +13,10 @@ const [serverOtp, setServerOtp] = useState("");
 const [enteredOtp, setEnteredOtp] = useState("");
 const [emailVerified, setEmailVerified] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
-  const [disableSignup,setDisableSignup]=useState(false)
 
 
   const handleEmailVErification=async () => {
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (!validator.isEmail(formData.email)) {
       setMessage({ text: "Please enter a valid email", type: "error" });
       return;
     }

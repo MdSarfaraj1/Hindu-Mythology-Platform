@@ -5,7 +5,7 @@ const Topic=require("../Models/Topics")
 //connect to db
 async function main() {
     try {
-        await mongoose.connect("mongodb://127.0.0.1:27017/Knowledge");
+        await mongoose.connect("mongodb+srv://mahammadsarfaraj6:unRGYmRjyUCM94O8@cluster0.29qffvj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
         console.log("connected to db");
     }
     catch (err) {
