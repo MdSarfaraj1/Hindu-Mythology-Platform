@@ -9,7 +9,7 @@ const SharedStory = () => {
   useEffect(() => {
     const fetchStory = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/getSharedStory/${storyId}`);
+        const response = await fetch(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/getSharedStory/${storyId}`,{},{withCredentials:true});
        
         let data = await response.json(); console.log(data)
         setStory(data.story);

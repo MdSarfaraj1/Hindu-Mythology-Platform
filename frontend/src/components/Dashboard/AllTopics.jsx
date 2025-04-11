@@ -31,7 +31,7 @@ const AllTopics = () => {
   ]);
   useEffect(() => {  // retrieving all topic
     axios
-      .get(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/retrieve_All_topics`)
+      .get(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/retrieve_All_topics`,{},{withCredentials:true})
       .then((response) => {
         setTopics(response.data.topic);
       });

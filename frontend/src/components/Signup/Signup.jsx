@@ -25,7 +25,7 @@ const [emailVerified, setEmailVerified] = useState(false);
       setOtpSent(true);
       const res = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/verify-email`, {
         email: formData.email,
-      });
+      },{ withCredentials: true });
       
       setServerOtp(res.data.OTP); // Save OTP returned from backend
       setMessage({ text: "OTP sent to your email", type: "success" });
@@ -51,7 +51,7 @@ const [emailVerified, setEmailVerified] = useState(false);
     setMessage({ text: '', type: '' }); // Reset message
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/signup`, formData);
+      const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/signup`, formData,{ withCredentials: true });
 
       if (response.status === 201) {
         setMessage({

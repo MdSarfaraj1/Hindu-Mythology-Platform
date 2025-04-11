@@ -23,7 +23,7 @@ function Facts() {
     try {
       const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/fact/save`, {
         facts,
-      });
+      },{withCredentials:true});
       if (response.status === 200) {
         setSavedStoryMessage(true);
         // Hide the message after 3 seconds
@@ -38,7 +38,7 @@ function Facts() {
     const fetchFacts = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_BACKEND_URL}/topics/learn/facts/`, { params: { topic } }
+          `${import.meta.env.VITE_APP_BACKEND_URL}/topics/learn/facts/`, { params: { topic } },{withCredentials:true}
         );
         setFacts(response.data);
         setLoading(false);

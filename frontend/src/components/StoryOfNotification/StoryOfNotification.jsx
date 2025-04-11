@@ -18,7 +18,7 @@ function StoryOfNotification() {
     try {
       const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/fact/save`, {
         facts,
-      });
+      },{withCredentials:true});
       if (response.status === 200) {
         setSavedStoryMessage(true);
         setTimeout(() => setSavedStoryMessage(false), 3000); // Hide message after 3 seconds
@@ -34,7 +34,7 @@ function StoryOfNotification() {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_APP_BACKEND_URL}/topics/learn/NotificationStory`,
-          { params: { StoryId } }
+          { params: { StoryId } },{withCredentials:true}
         );
         setFacts(response.data);
       } catch (err) {

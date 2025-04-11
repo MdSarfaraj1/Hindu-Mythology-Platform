@@ -81,9 +81,14 @@ exports.signup = async (req, res) => {
       });
       let maximumAge=data.remember?7*24 * 60 * 60 * 1000:24 * 60 * 60 * 1000;
       return res
-        .status(200)
-        .cookie("sessionToken", newToken, { maxAge: maximumAge })
-        .json({
+  .status(200)
+  .cookie("sessionToken", newToken, { 
+    maxAge: maximumAge,
+    httpOnly: true,
+    secure: true,     
+    sameSite: 'none',  
+    path: '/'
+  }).json({
           message: `Welcome ${user.username}`,
           userID: user._id,
           username: user.username,

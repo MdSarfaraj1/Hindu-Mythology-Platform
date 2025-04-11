@@ -15,7 +15,7 @@ function SocialShare({ url, text, facts }) {
         const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/fact/save`, {
           facts,
           Expiry: true
-        });
+        },{withCredentials:true});
 
         if (response.status === 200) {
           const newUrl = url + response.data.id;
