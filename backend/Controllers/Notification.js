@@ -16,7 +16,7 @@ const serviceAccount = {
   client_x509_cert_url: process.env.SERVICE_ACCOUNT_CLIENT_X509_CERT_URL,
   universe_domain: process.env.SERVICE_ACCOUNT_UNIVERSE_DOMAIN
 };
-
+// const serviceAccount=require("../")
 // Initialize Firebase Admin once
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -45,7 +45,7 @@ class NotificationController {
             body: story.notification,
           },
           data: {
-            url: `http://localhost:5173/storyOfNotification?StoryId=${newStory._id}`,
+            url: `https://hinduism-jaq6.onrender.com/storyOfNotification?StoryId=${newStory._id}`,
           },
           token: user.NotificationToken,
         };
