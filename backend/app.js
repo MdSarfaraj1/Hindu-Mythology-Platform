@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const schedule = require("node-schedule");
 // Import configurations
 const connectDB = require("./Configure/database");
 // Import routes
@@ -10,8 +9,6 @@ const userRouter = require("./Routers/user");
 const topicRouter = require("./Routers/topic");
 const passwordRouter = require("./Routers/forgetPassword");
 const notificationRouter = require("./Routers/Notification");
-// Import controllers  
-const NotificationController = require("./Controllers/Notification");
 // Initialize express app
 const app = express();
 const port = process.env.PORT;
@@ -45,14 +42,3 @@ const startServer = async () => {
 startServer();
 
 // Schedule notifications
-const SendNotification = async () => { 
-  console.log("Sending notifications at", new Date());
-  try {
-    await NotificationController.sendNotifications();
-  } catch (error) {
-    console.error("Failed to send scheduled notifications:", error);
-  }
-  const nextRun = new Date(Date.now() + 20 * 60 * 60 * 1000); // 20 hours later
-  schedule.scheduleJob(nextRun, SendNotification);
-};
-SendNotification();
