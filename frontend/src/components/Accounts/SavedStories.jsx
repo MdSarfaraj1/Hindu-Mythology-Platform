@@ -74,7 +74,7 @@ function SavedStories() {
               </h2>
               {isStoryClicked === index && 
               <SocialShare 
-              url={`http://localhost:5173/sharedStory/${obj.id}`}
+              url={`${import.meta.env.VITE_APP_FRONTEND_URL}/sharedStory/${obj.id}`}
               text={`Check out this amazing story about  ${obj.heading}`} 
               facts={""}/>}
               <div

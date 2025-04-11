@@ -175,7 +175,7 @@ function Facts() {
                   {/* Social share section */}
                   {share && (
                     <SocialShare
-                      url={`http://localhost:5173/sharedStory/`}
+                      url={`${import.meta.env.VITE_APP_FRONTEND_URL}/sharedStory/`}
                       text={`Check out this amazing story from ${topic}: ${facts.heading}`}
                       facts={facts}
                     />
