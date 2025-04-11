@@ -27,7 +27,7 @@ function StoryOfNotification() {
       console.log(err);
     }
     setSavingStory(false);
-  };
+  }; 
 
   useEffect(() => {
     const fetchNotificationStory = async () => {

@@ -103,27 +103,39 @@ function Facts() {
             </div>
 
             {/* Story Content */}
+           
             <div className="p-4 p-lg-5">
               <div className="row justify-content-center">
                 <div className="col-lg-10">
-                  <h2 className="display-6 text-primary fw-bold mb-4">
-                    {facts.heading}
-                  </h2>
+                {loading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+                Loading...
+              </>
+            ) : (
+              <>
+                <h2 className="display-6 text-primary fw-bold mb-4">
+                  {facts.heading}
+                </h2>
 
-                  {facts.story.map((section, index) => (
-                    <div
-                      key={index}
-                      className="mb-4 p-4 border-start border-4 border-primary bg-white shadow-sm rounded"
-                    >
-                      <h5 className="text-primary fw-bold mb-3">
-                        {section.head}
-                      </h5>
-                      <p className="mb-0 fs-5 text-secondary">
-                        {section.content}
-                      </p>
-                    </div>
-                  ))}
-
+                {facts.story.map((section, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 p-4 border-start border-4 border-primary bg-white shadow-sm rounded"
+                  >
+                    <h5 className="text-primary fw-bold mb-3">
+                      {section.head}
+                    </h5>
+                    <p className="mb-0 fs-5 text-secondary">
+                      {section.content}
+                    </p>
+                  </div>
+                ))}
+              </>
+            )}
                   {/* Action buttons */}
                   <div className="d-flex align-items-center mt-5 justify-content-between">
                     <div>
@@ -175,7 +187,9 @@ function Facts() {
                   {/* Social share section */}
                   {share && (
                     <SocialShare
-                      url={`${import.meta.env.VITE_APP_FRONTEND_URL}/sharedStory/`}
+                      url={`${
+                        import.meta.env.VITE_APP_FRONTEND_URL
+                      }/sharedStory/`}
                       text={`Check out this amazing story from ${topic}: ${facts.heading}`}
                       facts={facts}
                     />

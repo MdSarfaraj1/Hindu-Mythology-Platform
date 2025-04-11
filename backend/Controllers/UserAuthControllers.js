@@ -53,7 +53,7 @@ exports.signup = async (req, res) => {
           message: "User created successfully!",
           userID: newUser._id,
           username: newUser.username,
-        });
+        }); 
     } catch (error) {
       console.error("Signup error:", error);
       res.status(500).json({ message: "Server error during registration" });

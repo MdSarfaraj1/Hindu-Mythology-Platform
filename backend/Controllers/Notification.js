@@ -4,7 +4,7 @@ const Story =require("../Models/Stories")
 const admin = require("firebase-admin");
 const { generateStory } = require("../Utils/generateStory");
 const serviceAccount = {
-  type: process.env.SERVICE_ACCOUNT_TYPE,
+  type: process.env.SERVICE_ACCOUNT_TYPE, 
   project_id: process.env.SERVICE_ACCOUNT_PROJECT_ID,
   private_key_id: process.env.SERVICE_ACCOUNT_PRIVATE_KEY_ID,
   private_key: process.env.SERVICE_ACCOUNT_PRIVATE_KEY,
@@ -45,7 +45,7 @@ class NotificationController {
             body: story.notification,
           },
           data: {
-            url: `https://hinduism-jaq6.onrender.com/storyOfNotification?StoryId=${newStory._id}`,
+            url: `${process.env.FRONTEND_URL}/storyOfNotification?StoryId=${newStory._id}`,
           },
           token: user.NotificationToken,
         };

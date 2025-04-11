@@ -26,7 +26,7 @@ function TopicChatbot({ topic  }) {
     
  
   
-       const response = await axios.post('${import.meta.env.VITE_APP_BACKEND_URL}/topics/askQuestion', {question:inputValue, topic},{withCredentials:true});
+       const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/askQuestion`, {question:inputValue, topic},{withCredentials:true});
       setMessages(prevMessages => [...prevMessages, { role: 'assistant', contentType:"json",content: response.data.AIresponse }]);
       setIsLoading(false);
   

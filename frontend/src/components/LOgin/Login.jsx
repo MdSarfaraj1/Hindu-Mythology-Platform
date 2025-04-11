@@ -13,7 +13,6 @@ function Login() {
     remember: false,
   });
   const handleInputChange = (e) => {
-    console.log(e.target.name, e.target.value); 
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
