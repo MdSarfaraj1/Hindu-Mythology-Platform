@@ -4,26 +4,6 @@ import Categoty from "./CAtegory";
 import { Link } from "react-router-dom";
 import axios from "axios";
 const Hero = () => {
-  useEffect(() => {
-    async function checkSession() {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/user/verify-token`, {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (res.status==200)
-          console.log("Token present")
-
-        // Token valid
-      } catch (err) {
-        localStorage.removeItem("userID");
-        localStorage.removeItem("username");
-      }
-    }
-
-    checkSession();
-  }, []);
   return (
     <div
       className="container-fluid p-0 position-relative"

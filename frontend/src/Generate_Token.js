@@ -1,5 +1,5 @@
 // the file is used to generate firebase token f
-
+ 
 import { messaging } from "./firebase";
 import { getToken } from "firebase/messaging";
 import axios from "axios";
