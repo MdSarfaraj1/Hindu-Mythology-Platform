@@ -4,7 +4,7 @@ const Story =require("../Models/Stories")
 const admin = require("firebase-admin");
 const { generateStory } = require("../Utils/generateStory");
 //const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
-const serviceAccount=require("../firbase_admin.json")
+const serviceAccount=require("../firbase.json")
 
 // Initialize Firebase Admin once
 admin.initializeApp({
