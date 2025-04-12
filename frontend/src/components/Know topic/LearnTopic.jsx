@@ -21,8 +21,9 @@ function LearnTopic() {
   useEffect(() => {
     async function getUserChoice(topic) {
       try {
+        const formattedTopic = topic.replace(/\s+/g, '');
         const module = await import("../../assets/TopicDescription");
-        setTopicData(module[topic] || {});
+        setTopicData(module[formattedTopic] || {});
       } catch (error) {
         console.error("Error loading module:", error);
       }
