@@ -141,12 +141,8 @@ function Login() {
 
                     <button
                       type="submit"
-                      className="btn w-100 mb-3"
-                      style={{
-                        backgroundColor: "#00ffff",
-                        color: "#000",
-                        border: "none",
-                      }}
+                      className="btn btn-primary w-100 mb-3"
+                    
                     >
                       Login
                     </button>
