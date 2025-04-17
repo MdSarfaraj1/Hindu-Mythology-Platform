@@ -31,7 +31,10 @@ class NotificationController {
         { NotificationToken: { $ne: "" } },
         { NotificationToken: 1, selectedTopics: 1, _id: 0, storyLanguage: 1 }
       ).populate({ path: "selectedTopics", select: "name" });
-
+ if(users.length==0){
+console.log("No users found with NotificationToken");
+return  
+};
       let sendingStoryPromises = users.map(async (user) => {
         const topics = user.selectedTopics.map((topic) => topic.name);
 
@@ -39,7 +42,7 @@ class NotificationController {
 
         let newStory = new Story(story);
         await newStory.save();
-        const message = {
+        const message = { 
           notification: {
             title: story.heading,
             body: story.notification,

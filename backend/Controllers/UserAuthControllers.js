@@ -45,7 +45,7 @@ exports.signup = async (req, res) => {
       const newToken = jwt.sign({ UserID: newUser._id }, process.env.SECRET_KEY, {
         expiresIn: "24h",
       });
-      
+       
       res
         .status(201)
         .cookie("sessionToken", newToken, { maxAge: 24 * 60 * 60 * 1000 })
@@ -172,7 +172,6 @@ exports.signup = async (req, res) => {
       ...obj,
       story:obj.story.map(({_id,...rest})=>rest)
     }))
-    console.log(cleanedStories)
     res.status(200).json({
       message:cleanedStories
     });

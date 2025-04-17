@@ -72,10 +72,13 @@ const SelectedTopics = ({ userID }) => {
                   </div>
                   <div className="card-body">
                     <h5 className="card-title fw-bold">{topic.name}</h5>
-                    <p className="card-text text-muted">{topic.description}</p>
+                    <p className="card-text text-muted">{topic.description}</p> 
                   </div>
-                </div>
+                 
+                </div> 
+               
               </Link>
+             
             </div>
           ))}
         </div>

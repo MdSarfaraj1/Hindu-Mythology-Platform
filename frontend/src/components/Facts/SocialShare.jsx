@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 function SocialShare({ url, text, facts }) {
   const [shareUrl, setShareUrl] = useState(url);
@@ -10,7 +9,6 @@ function SocialShare({ url, text, facts }) {
     if (!facts) return; 
 
     const handleSaveStory = async () => {
-      setIsLoading(true);
       try {
         const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/topics/fact/save`, {
           facts,
@@ -18,15 +16,14 @@ function SocialShare({ url, text, facts }) {
         },{withCredentials:true});
 
         if (response.status === 200) {
-          const newUrl = url + response.data.id;
-          setShareUrl(newUrl);
+          console.log(response)
+          setShareUrl(prev=>prev+response.data.id);
+          console.log(shareUrl)
         }
       } catch (err) {
         console.error("Error saving story:", err);
         setError("Failed to create sharing link");
-      } finally {
-        setIsLoading(false);
-      }
+      } 
     };
 
     handleSaveStory();

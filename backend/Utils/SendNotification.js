@@ -7,7 +7,7 @@ const SendNotification = async () => {
     } catch (error) { 
       console.error("Failed to send scheduled notifications:", error);
     } 
-    const nextRun = new Date(Date.now() + 20 * 60 * 60 * 1000); // 20 hours later
+    const nextRun = new Date(Date.now() + 1* 60* 60 * 1000); // 20 hours later
     schedule.scheduleJob(nextRun, SendNotification);
   };
 

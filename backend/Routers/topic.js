@@ -48,7 +48,7 @@ router.get("/learn/NotificationStory", async (req, res) => {
   }
 });
 
-router.post("/askQuestion",async(req,res)=>{
+router.post("/askQuestion",async(req,res)=>{ 
   const { question, topic } = req.body;
   try {
     const response = await generateResponse(question, topic);
