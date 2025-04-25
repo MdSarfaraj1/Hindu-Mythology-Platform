@@ -3,6 +3,7 @@ import validator from 'validator';
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../Contex/Contex_Api";
+import { GoogleLogin } from '@react-oauth/google';
 
 function Signup() {
   const { setUser } = useAuth()
@@ -79,7 +80,40 @@ const [emailVerified, setEmailVerified] = useState(false);
     }
   };
 
+// Handle Google signup success
+const handleGoogleSuccess = async (credentialResponse) => {
+  try {
+    // Send the credential to your backend
+    const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/google-signup`, {
+      credential: credentialResponse.credential
+    }, {
+      withCredentials: true
+    });
 
+    setMessage({
+      text: response.data.message || "Signup successful",
+      type: "success",
+    });
+    
+    setUser(response.data.userID, response.data.username, response.data.profilePicture);
+    setTimeout(() => {
+      navigate(`/dashboard`);
+    }, 1000);
+  } catch (error) {
+    setMessage({
+      text: error.response?.data?.message || "Failed to signup with Google",
+      type: "error",
+    });
+  }
+};
+
+// Handle Google login failure
+const handleGoogleFailure = () => {
+  setMessage({
+    text: "Google signup failed. Please try again.",
+    type: "error",
+  });
+};
   return (
     <div
       className="min-vh-100 d-flex align-items-center"
@@ -113,6 +147,21 @@ const [emailVerified, setEmailVerified] = useState(false);
                     {message.text}
                   </div>
                 )}
+                {/* Google Sign-up Button */}
+                <div className="d-flex justify-content-center mb-4">
+                  <div className="position-relative">
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={handleGoogleFailure}
+                      useOneTap
+                      theme="filled_blue"
+                      text="signup_with"
+                      shape="rectangular"
+                    />
+                  </div>
+                </div>
+                
+                <div className="text-center text-white-50 mb-4">Or sign up with email</div>
                 <form
                   onSubmit={handleSubmit}
                   className="needs-validation"

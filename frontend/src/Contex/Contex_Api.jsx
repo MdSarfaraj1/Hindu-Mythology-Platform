@@ -12,6 +12,9 @@ export const UserContextProvider=({children})=>{
     const [username, setUsername] = useState(() => {
         return localStorage.getItem('username') || null;
     });
+    const [profilePicture, setProfilePicture] = useState(() => {
+      return localStorage.getItem('profilePicture') || null;
+  });
 
     const [flashMessage,setMessage]=useState("")
 
@@ -21,16 +24,19 @@ export const UserContextProvider=({children})=>{
       };
     
     // Update localStorage whenever userID changes
-    const updateUserID = (newUserID,newUsername) => {
+    const updateUserID = (newUserID,newUsername,profilePicture) => {
         if (newUserID) {
             localStorage.setItem('userID', newUserID);
             localStorage.setItem('username',newUsername)
+            localStorage.setItem('profilePicture',profilePicture)
         } else {
             localStorage.removeItem('userID');
             localStorage.removeItem('username');
+            localStorage.removeItem('profilePicture')
         }
         setUserID(newUserID);
         setUsername(newUsername);
+        setProfilePicture(profilePicture);
     };
 
     useEffect(() => {
@@ -55,7 +61,7 @@ export const UserContextProvider=({children})=>{
       }, []);
       
     return(
-        <UserContext.Provider value={{userID,username,setUser:updateUserID,flashMessage,setFlashMessage}}>
+        <UserContext.Provider value={{userID,username,setUser:updateUserID,flashMessage,setFlashMessage,profilePicture}}>
             {children}
         </UserContext.Provider>
     )

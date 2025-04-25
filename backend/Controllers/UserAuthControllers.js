@@ -3,6 +3,104 @@ const jwt = require("jsonwebtoken");
 const User = require("../Models/User");
 const Stories = require("../Models/Stories");
 const { transporter } = require("../Utils/mailTransporter");
+const { OAuth2Client } = require('google-auth-library');
+
+// Initialize Google OAuth client
+const client = new OAuth2Client(process.env.GOOGLE_AUTH_CLIENT_ID);
+
+// Verify Google token
+async function verifyGoogleToken(token) {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    return ticket.getPayload();
+  } catch (error) {
+    console.error("Error verifying Google token:", error);
+    return null;
+  }
+}
+
+// Google login function
+exports.googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+    
+    // Verify the Google token
+    const payload = await verifyGoogleToken(credential);
+    
+    if (!payload) {
+      return res.status(400).json({ message: "Invalid Google token" });
+    }
+    
+    // Extract user information from the payload
+    const { email, name, sub: googleId, picture } = payload;
+    
+    // Check if user exists in your database
+    let user = await User.findOne({ email });
+    
+    if (!user) {
+      // User doesn't exist, create a new one
+      const randomPassword = Math.random().toString(36).slice(-10);
+      const hashPassword = await bcrypt.hash(randomPassword, 10);
+      
+      user = new User({
+        username: name,
+        email,
+        googleId,
+        profilePicture: picture,
+        password: hashPassword
+      });
+      
+      await user.save();
+    } else if (!user.googleId) {
+      // If user exists but doesn't have a Google ID, update it
+      user.googleId = googleId;
+      if (picture && !user.profilePicture) {
+        user.profilePicture = picture;
+      }
+      await user.save();
+    }
+    
+    // Create JWT token
+    const newToken = jwt.sign({ UserID: user._id }, process.env.SECRET_KEY, {
+      expiresIn: "24h",
+    });
+    
+    // Set cookie and send response
+    res
+      .status(200)
+      .cookie("sessionToken", newToken, { 
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true,     
+        sameSite: 'none',  
+        path: '/'
+      })
+      .json({
+        message: `Welcome ${user.username}`,
+        userID: user._id,
+        username: user.username,
+        profilePicture: user.profilePicture ||"userLogo.png",
+      });
+    
+  } catch (error) {
+    console.error("Google login error:", error);
+    res.status(500).json({ message: "Server error during Google login" });
+  }
+};
+
+// Google signup function (can reuse login logic if you want)
+exports.googleSignup = async (req, res) => {
+  try {
+    return await exports.googleLogin(req, res);
+  } catch (error) {
+    console.error("Google signup error:", error);
+    res.status(500).json({ message: "Server error during Google signup" });
+  }
+};
 
 
 exports.signup = async (req, res) => {
@@ -36,6 +134,7 @@ exports.signup = async (req, res) => {
           message: "User created successfully!",
           userID: newUser._id,
           username: newUser.username,
+          profilePicture: newUser.profilePicture ||"userLogo.png",
         }); 
     } catch (error) {
       console.error("Signup error:", error);
@@ -77,6 +176,7 @@ exports.signup = async (req, res) => {
           message: `Welcome ${user.username}`,
           userID: user._id,
           username: user.username,
+          profilePicture: user.profilePicture ||"userLogo.png",
         });
     }
   

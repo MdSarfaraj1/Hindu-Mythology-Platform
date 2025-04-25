@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Contex/Contex_Api";
 import axios from "axios";
 const Navbar = () => {
-  const { userID, setUser } = useAuth();
+  const { userID, setUser ,username,profilePicture} = useAuth();
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
@@ -246,46 +246,49 @@ const Navbar = () => {
 
             {/* Account Dropdown */}
             <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Account
-              </a>
-              <ul className="dropdown-menu dropdown-menu-dark">
-                {userID ? (
-                  <>
-                  <li>
-                    <Link to={"/accountSettings"} className="dropdown-item" >
-                      Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <button className=" dropdown-item" onClick={handleLogout}>
-                      Logout
-                    </button>
-                    </li>
-                    
-                  </>
-                  
-                ) : (
-                  <>
-                    <li>
-                      <Link className="dropdown-item" to={"/login"}>
-                        Login
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to={"/signup"}>
-                        Register
-                      </Link>
-                    </li>
-                  </>
-                )}
-              </ul>
+              {userID ? (
+                <Link 
+                  to={"/accountSettings"} 
+                  className="nav-link d-flex align-items-center" 
+                >
+                  <img
+                    src={profilePicture || "/profilePicture.png"}
+                    className="rounded-circle me-2"
+                    style={{
+                      height: "30px",
+                      width: "30px",
+                      objectFit: "cover",
+                      border: "1px solid #FFC125",
+                    }}
+                  />
+                  <span>{username}</span>
+                </Link>
+              ) : (
+                <>
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Account
+                </a>
+                 <ul className="dropdown-menu dropdown-menu-dark">
+                   <li>
+                     <Link className="dropdown-item" to={"/login"}>
+                       Login
+                     </Link>
+                   </li>
+                   <li>
+                     <Link className="dropdown-item" to={"/signup"}>
+                       Register
+                     </Link>
+                   </li>
+                  </ul>
+                 </>
+              )}
+             
             </li>
           </ul>
         </div>

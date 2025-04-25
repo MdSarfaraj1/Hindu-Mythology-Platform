@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../Contex/Contex_Api";
+import { GoogleLogin } from '@react-oauth/google';
 
 function Login() {
   const {setUser}=useAuth();
@@ -27,7 +28,7 @@ function Login() {
         text: response.data.message,
         type: "success",
       });
-      setUser(response.data.userID,response.data.username);
+      setUser(response.data.userID,response.data.username,response.data.profilePicture);
       setTimeout(() => {
         navigate(`/dashboard`);
       }, 1000);
@@ -49,6 +50,41 @@ function Login() {
 
     };
   }
+// Handle Google login success
+const handleGoogleSuccess = async (credentialResponse) => {
+  try {
+    // Send the credential to your backend
+    const response = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/user/google-login`, {
+      credential: credentialResponse.credential
+    }, {
+      withCredentials: true
+    });
+
+    setMessage({
+      text: response.data.message || "Login successful",
+      type: "success",
+    });
+    
+    setUser(response.data.userID, response.data.username, response.data.profilePicture);
+    setTimeout(() => {
+      navigate(`/dashboard`);
+    }, 1000);
+  } catch (error) {
+    setMessage({
+      text: error.response?.data?.message || "Failed to login with Google",
+      type: "error",
+    });
+  }
+};
+
+// Handle Google login failure
+const handleGoogleFailure = () => {
+  setMessage({
+    text: "Google login failed. Please try again.",
+    type: "error",
+  });
+};
+
     return (
       <div
         className="min-vh-100 d-flex align-items-center"
@@ -146,6 +182,19 @@ function Login() {
                     >
                       Login
                     </button>
+                    {/* LOGIN WITH GOOGLE  */}
+                    <div className="d-flex justify-content-center my-3">
+                    <div className="position-relative">
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleFailure}
+                        useOneTap
+                        theme="filled_blue"
+                        text="signin_with"
+                        shape="rectangular"
+                      />
+                    </div>
+                  </div>
 
                     <div className="text-center text-white-50">
                       Don't have an account?{" "}

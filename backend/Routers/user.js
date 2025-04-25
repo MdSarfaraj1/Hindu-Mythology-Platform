@@ -10,6 +10,10 @@ router.post("/profile", isLoggedIn, UserAuthController.getProfile);
 router.get("/verify-token",UserAuthController.verifyAuthToken)
 router.post("/verify-email",UserAuthController.verifyemail)
 
+//  Google OAuth routes
+router.post('/google-login', UserAuthController.googleLogin);
+router.post('/google-signup', UserAuthController.googleSignup);
+
 router.get("/stories", isLoggedIn, UserAuthController.getUserStories)
 router.post("/stories/delete",isLoggedIn,UserAuthController.deleteUserStory) 
 

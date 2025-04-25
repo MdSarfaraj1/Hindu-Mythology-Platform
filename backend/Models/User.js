@@ -15,6 +15,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    googleId: {
+        type: String,
+        sparse: true, // Allows null values but ensures uniqueness when values exist
+        unique: true
+      },
+      profilePicture: {
+        type: String,
+        default:''
+      },
     selectedTopics: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Topic'
