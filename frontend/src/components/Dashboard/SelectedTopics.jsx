@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../Contex/Contex_Api";
 import {
   denied_Notification_Permission,
   request_Notification_Permission,
@@ -8,7 +9,8 @@ import {
 const SelectedTopics = ({ userID }) => {
   const [userTopics, setUserTopics] = useState([]);
   const [isInterested, setIsInterested] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
+const {setFlashMessage} = useAuth()
   useEffect(() => {
     const fetchUserTopics = async () => {
       if (userID) {
@@ -30,19 +32,23 @@ const SelectedTopics = ({ userID }) => {
     fetchUserTopics();
   }, [userTopics]);
   const handleCheckboxChange = async (event) => {
+    setIsLoading(true);
     const checked = event.target.checked;
     if (checked) {
-    
       request_Notification_Permission(userID);
       setIsInterested(true);
+      setIsLoading(false);
+      setFlashMessage("Notification permission granted. You will receive notifications.");
     } else {
      
       denied_Notification_Permission(userID);
       setIsInterested(false);
+      setIsLoading(false);
+      setFlashMessage("Notification permission denied. You will not receive notifications.");
     }
   };
 
- 
+
 
   return (
     <div className="container py-4">
@@ -85,22 +91,35 @@ const SelectedTopics = ({ userID }) => {
       ) : (
         <div>No topics selected yet</div>
       )}
-      <button className="btn btn-outline-success mt-5">
-         <div class="form-check form-switch  ">
+<div className="position-fixed z-3 bottom-0  end-0 mb-3 me-5">
+    <div className="d-flex align-items-center gap-2 bg-light p-2 rounded shadow">
+      <div className="form-check form-switch">
         <input
-          class="form-check-input"
+          className="form-check-input"
           type="checkbox"
           role="switch"
           id="flexSwitchCheckChecked"
           checked={isInterested}
           onChange={handleCheckboxChange}
+          disabled={isLoading}
         />
-        <label class="form-check-label" for="flexSwitchCheckChecked">
-        Interested in receiving notifications
+        <label
+          className="form-check-label"
+          htmlFor="flexSwitchCheckChecked"
+        >
+          {isInterested ? "Notifications Enabled" : "Enable Notifications"}
         </label>
       </div>
-      </button>
+
+      {isLoading && (
+        <div className="spinner-border spinner-border-sm text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      )}
+    </div>
+
      
+</div>
     </div>
   );
 };

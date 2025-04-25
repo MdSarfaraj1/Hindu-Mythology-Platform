@@ -137,20 +137,24 @@
       max-width: 1100px;
   
   }
-.flash-message{
-  position:fixed;
-  top:px;
-  left:50%;
-  transform: translateX(-50%);
-  background-color: #81e086;
-  color:white;
-  padding: 10px 20px ;
-  border-radius: 5px;
-  font-size: 16px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  z-index: 1000;
-  transition: opacity 0.5s ease-in-out;
-}
+  .flash-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #5bdc85, #4fc3f7);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    opacity: 0.95;
+    animation: slideDownFade 0.5s ease-out;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
 .card-img-top {
   width: 100%; /* Makes the image fill the container width */
   max-height: 250px; /* Limits the image height */

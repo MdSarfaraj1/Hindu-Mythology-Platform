@@ -5,13 +5,8 @@ import { getToken } from "firebase/messaging";
 import axios from "axios";
 export const request_Notification_Permission = async (userID) => {
   try {
-    // First check permission
-    const permission = await Notification.requestPermission();
-    if (permission !== "granted") {
-      console.log("Notification permission was not granted.");
-      return;
-    }
-    
+    console.log("i am from request_Notification_Permission ");
+
     // Wait for the service worker to be ready
     if (!navigator.serviceWorker.controller) {
       // Register service worker if not already registered

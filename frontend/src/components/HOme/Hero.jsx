@@ -1,9 +1,11 @@
 
-import { useEffect } from "react";
+
+import { useAuth } from "../../Contex/Contex_Api";
 import Categoty from "./CAtegory";
 import { Link } from "react-router-dom";
-import axios from "axios";
+
 const Hero = () => {
+const {userID}=useAuth()
   return (
     <div
       className="container-fluid p-0 position-relative"
@@ -37,7 +39,8 @@ const Hero = () => {
             type="button"
             className="btn btn-primary btn-lg px-4 rounded-pill shadow-sm"
           >
-            <Link to={"/signup"} className="text-white"> Sign Up Now</Link>
+            {userID?<Link to={"/dashboard"} className="text-white"> Go to Dashboard</Link>:<Link to={"/signup"} className="text-white"> Sign Up Now</Link>}
+            
           </button>
         </div>
       </div>
