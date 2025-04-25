@@ -4,23 +4,6 @@ const User = require("../Models/User");
 const Stories = require("../Models/Stories");
 const { transporter } = require("../Utils/mailTransporter");
 
-exports.verifyemail=async(req, res) => {
-  try{ 
-     const { email } = req.body;
-     const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
-  const mailOptions = {
-    from: process.env.EMAIL_USERNAME,
-    to: email,
-    subject: "Verification of email",
-    html: `<p>Here is the otp to verify your email</p>
-          <p>OTP: ${otp}</p> `}
-  await transporter.sendMail(mailOptions);
-  res.status(200).json({OTP:otp})
-  }catch (error) {
-  console.error(error);
-  res.status(500).json({ message: "Error in password reset request" });
-}
-}
 
 exports.signup = async (req, res) => {
     try {
@@ -48,7 +31,7 @@ exports.signup = async (req, res) => {
        
       res
         .status(201)
-        .cookie("sessionToken", newToken, { maxAge: 24 * 60 * 60 * 1000 })
+        .cookie("sessionToken", newToken, { maxAge: 48 * 60 * 60 * 1000 })
         .json({
           message: "User created successfully!",
           userID: newUser._id,
@@ -75,11 +58,13 @@ exports.signup = async (req, res) => {
     }
     let data = req.body;
     let user = await User.findOne({ email: data.email });
+
     if (user && (await bcrypt.compare(data.password, user.password))) {
-      const newToken = jwt.sign({ UserID: user._id }, process.env.secret_key, {
-        expiresIn: "24h",
-      });
       let maximumAge=data.remember?7*24 * 60 * 60 * 1000:24 * 60 * 60 * 1000;
+      const newToken = jwt.sign({ UserID: user._id }, process.env.secret_key, {
+        expiresIn: maximumAge,
+      });
+      
       return res
   .status(200)
   .cookie("sessionToken", newToken, { 
@@ -196,3 +181,21 @@ exports.signup = async (req, res) => {
    
     
   }
+  exports.verifyemail=async(req, res) => {
+    try{ 
+       const { email } = req.body;
+       const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+    const mailOptions = {
+      from: process.env.EMAIL_USERNAME,
+      to: email,
+      subject: "Verification of email",
+      html: `<p>Here is the otp to verify your email</p>
+            <p>OTP: ${otp}</p> `}
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({OTP:otp})
+    }catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error in password reset request" });
+  }
+  }
+  

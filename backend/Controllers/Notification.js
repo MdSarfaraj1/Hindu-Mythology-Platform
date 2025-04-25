@@ -31,10 +31,10 @@ class NotificationController {
         { NotificationToken: { $ne: "" } },
         { NotificationToken: 1, selectedTopics: 1, _id: 0, storyLanguage: 1 }
       ).populate({ path: "selectedTopics", select: "name" });
- if(users.length==0){
-console.log("No users found with NotificationToken");
-return  
-};
+          if(users.length==0){
+          console.log("No users found with NotificationToken");
+          return  
+          };
       let sendingStoryPromises = users.map(async (user) => {
         const topics = user.selectedTopics.map((topic) => topic.name);
 
@@ -62,7 +62,7 @@ return
       await Promise.all(sendingStoryPromises);
       return { success: true, message: "Notifications sent successfully" };
     } catch (error) {
-      console.error("Error sending notifications:", error);
+      console.error("Error sending notifications:", error);  
       return { success: false, message: "Failed to send notifications" };
     }
   }
@@ -79,7 +79,6 @@ return
       if (!updatedUser) {
         throw new Error("User not found");
       }
-
       return {
         message: "Token updated successfully",
         user: updatedUser,
